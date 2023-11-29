@@ -24,7 +24,7 @@ export const buildCartRequest = (itemId: string, quantity: number): CartRequest 
     };
 };
 
-export const requestOptions = (itemId: string, quantity: number) => {
+export const requestOptionsAddToCart = (itemId: string, quantity: number) => {
     return {
         data: buildCartRequest(itemId, quantity),
         headers: {
