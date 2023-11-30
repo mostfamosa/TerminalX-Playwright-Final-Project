@@ -1,5 +1,5 @@
 import { expect, test as setup } from '@playwright/test';
-import { NavBar } from "../../logic/components/NavBar"
+import { NavBar } from "../../logic/components/nav-bar"
 import { existsSync } from 'fs';
 
 const authFile = 'playwright/.auth/user.json';
