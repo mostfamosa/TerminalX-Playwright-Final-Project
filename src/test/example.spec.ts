@@ -17,7 +17,7 @@ test.describe('stam test', () => {
         //add item to my list
         const result = await addItemToMyList('1527914');
         await page.goto("https://www.terminalx.com/wishlist/items");
-        console.log(result.data.addProductsToWishlist.anyWishlist.items[0].product.price_range.maximum_price.final_price.value);
+        console.log(result.data.addProductsToWishlist.anyWishlist.items[0].product.thumbnail.label);
    
    
    
