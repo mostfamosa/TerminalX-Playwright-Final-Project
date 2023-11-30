@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { BaseComponent } from "./BaseComponent";
+import { BaseComponent } from "./base-components";
 
 export class NavBar extends BaseComponent {
   private readonly JUST_LANDED_LOC = "//div[@class='item_1lit']//a[contains(string(),'JUST LANDED')]";
