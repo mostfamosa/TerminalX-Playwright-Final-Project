@@ -5,13 +5,14 @@ import { requestOptionsUserInfo } from "./request/current-user-info-request";
 import { AddItemToCartResponse } from "./response/add-item-cart-response";
 import { AddProductsToWishlistResponse } from "./response/add-item-mylist-response";
 import { CurrentUserInfoResponse } from "./response/current-user-info-response";
+import { requestOptionsDeleteItem } from "./request/delete-item-mylist-request";
 import { urls } from "./api-urls.json";
 
-export const addItemToCart = async (itemId: string, quantity: number): Promise<AddItemToCartResponse> => {
-    return (await apiPostMethod(urls.addItemToCart, requestOptionsAddToCart(itemId, quantity))).json();
+export const addItemToCart = async (itemSku: string, quantity: number): Promise<AddItemToCartResponse> => {
+    return (await apiPostMethod(urls.addItemToCart, requestOptionsAddToCart(itemSku, quantity))).json();
 }
 
-export const addItemToMyList = async (itemId: string): Promise<AddProductsToWishlistResponse> => {
+export const addItemToMyList = async (itemId: number): Promise<AddProductsToWishlistResponse> => {
     return (await apiPostMethod(urls.addItemToMyList, requestOptionsAddToMyList(itemId))).json();
 }
 
@@ -19,6 +20,6 @@ export const currentUserInfo = async (): Promise<CurrentUserInfoResponse> => {
     return (await apiPostMethod(urls.currentUserInfo, requestOptionsUserInfo())).json();
 }
 
-// export const deleteItemFromCartById = async (): Promise<AddItemToCartResponse> => {
-//     return (await apiPostMethod(urls.deleteItemFromCartById, requestOptionsDeleteItem())).json();
-// }
+export const deleteItemFromListById = async (itemId: number): Promise<AddProductsToWishlistResponse> => {
+    return (await apiPostMethod(urls.deleteItemFromListById, requestOptionsDeleteItem(itemId))).json();
+}
