@@ -5,7 +5,7 @@ import { requestOptionsUserInfo } from "./request/current-user-info-request";
 import { AddItemToCartResponse } from "./response/add-item-cart-response";
 import { AddProductsToWishlistResponse } from "./response/add-item-mylist-response";
 import { CurrentUserInfoResponse } from "./response/current-user-info-response";
-import { requestOptionsDeleteItem } from "./request/delete-item-mylist-request";
+import { requestOptionsDeleteItem } from "./request/delete-item-cart-request";
 import { urls } from "./api-urls.json";
 import { WishlistResponse } from "./response/get-wish-list-response";
 
