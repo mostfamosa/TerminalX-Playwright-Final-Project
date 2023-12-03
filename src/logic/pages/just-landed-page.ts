@@ -18,7 +18,7 @@ export class JustLanded extends BasePage {
   }
 
   async clickOnRandomItem(index: number) {
-    this.itemInList = this.page.locator(this.ITEM_IN_LIST(index));
+    this.itemInList = await this.page.locator(this.ITEM_IN_LIST(index));
     await this.itemInList.click();
   }
 

@@ -3,7 +3,7 @@ import { addItemToCart, addItemToMyList, currentUserInfo, deleteItemFromCartById
 import { products } from "../logic/api/items-test.json";
 import { FavouritePage } from '../logic/pages/favourite-page';
 import { ItemPage } from '../logic/pages/item-page';
-import { justLanded } from '../logic/pages/just-landed-page';
+import { JustLanded } from '../logic/pages/just-landed-page';
 
 
 test.describe('stam test', () => {
@@ -68,13 +68,14 @@ test.describe('stam test', () => {
 
 
     //add item using UI
-    const gotoitem = new justLanded(page);
+    const gotoitem = new JustLanded(page);
     await page.goto('https://www.terminalx.com/justlanded')
-    gotoitem.clickOnRandomItem(3);
-    const add = new ItemPage(page);
-    page.waitForLoadState();
+    await gotoitem.clickOnRandomItem(11);
+    await page.waitForTimeout(3000);
+ const add = new ItemPage(page);
+    // page.waitForLoadState();
    
-    add.randomNumber();
+   add.randomNumber();
     // add.ClickAddToCart();
 
 
