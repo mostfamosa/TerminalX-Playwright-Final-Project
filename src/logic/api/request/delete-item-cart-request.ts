@@ -1,7 +1,9 @@
-export const requestOptionsDeleteItem = (itemId: number) => {
+export const requestOptionsDeleteItemCart = (itemId: number) => {
     return {
         data: {
-            "id": itemId
+            "cart_item_id": itemId,
+            "skip_collect": 0,
+            "withMultipass": false
         },
         headers: { "Content-Type": "application/json" }
     }
