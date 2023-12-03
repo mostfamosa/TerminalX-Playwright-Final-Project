@@ -71,11 +71,16 @@ test.describe('stam test', () => {
     const gotoitem = new JustLanded(page);
     await page.goto('https://www.terminalx.com/justlanded')
     await gotoitem.clickOnRandomItem(11);
+
     await page.waitForTimeout(3000);
+
  const add = new ItemPage(page);
+
     // page.waitForLoadState();
-   
-   add.randomNumber();
+    await page.waitForLoadState('load');
+
+ // add.RandomColor();
+   add.CHooseSize();
     // add.ClickAddToCart();
 
 
