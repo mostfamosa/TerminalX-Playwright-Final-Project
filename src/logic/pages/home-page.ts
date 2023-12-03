@@ -22,4 +22,11 @@ export class HomePage extends BasePage {
   async clickCartFromNavBar() {
     await this.navBar.clickCart();
   }
+  async clickFavouriteFromNavbar(){
+    await this.navBar.clickFavourite()
+
+  }
+  async clickProfileFromNavbar(){
+    await this.navBar.clickOnProfileName()
+  }
 }
