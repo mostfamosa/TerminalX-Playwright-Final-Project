@@ -6,33 +6,22 @@ export class FavouritePage extends BasePage {
 
     constructor(page: Page) {
         super(page);
-        (async () => {
-            await this.initPage();
-        })();
     }
 
-    async initPage(): Promise<void> {
-        await this.page.waitForSelector("div[class='title-wrap_2RT2']");
-        const innerText = await this.page.innerText("div[class='title-wrap_2RT2']");
-    }
+
 
     async itemInTheList(itemname: string): Promise<boolean> {
         // i want to check if the itemname exists in the list ITEMS_LIST_LOCATOR
-
-        const listItems = await this.page.locator(this.ITEMS_LIST_LOCATOR).all();
-        const itemNames: string[] = [];
-
-        for (const listItem of listItems) {
-            const nameElement = await listItem.locator("a[class='tx-link-a title_3ZxJ tx-link_29YD underline-hover_3GkV']");
-            if (nameElement) {
-                const itemName = await nameElement.innerText();
-                itemNames.push(itemName);
-            }
-        }
-        if (itemNames.includes(itemname)) {
+        const item = this.page.locator(`//a[text()="${itemname}"]`);
+        if (item != null) {
+            console.log(await item.textContent());
             return true;
         }
+        else {
+            console.log('null')
+            return false
+        }
 
-        return false;
+
     }
 }
