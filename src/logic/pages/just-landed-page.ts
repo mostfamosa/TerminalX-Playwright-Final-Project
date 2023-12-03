@@ -3,7 +3,7 @@ import { BasePage } from "./base-page";
 
 export class justLanded extends BasePage {
   private readonly ITEM_IN_LIST = (index: number) => {
-    return `//[@class="product-list_yyTm"]//li[${index}]`;
+    return `//*[@class="product-list_yyTm"]//li[${index}]`;
   };
 
   private readonly ADD_TO_FAVOURITE = (index: number) => {
