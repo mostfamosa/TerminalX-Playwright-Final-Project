@@ -2,11 +2,13 @@ import { Locator, Page } from "@playwright/test";
 import { BaseComponent } from "./base-components";
 
 export class NavBar extends BaseComponent {
-  private readonly JUST_LANDED_LOC = "//div[@class='item_1lit']//a[contains(string(),'JUST LANDED')]";
-  private readonly SEARCH_LOC = "//button[@data-test-id='qa-header-search-button']";
+  private readonly JUST_LANDED_LOC = `//*[@id="app-root"]/div[2]/header/div/div[4]/nav/ul/li/a[contains(string(),'JUST LANDED')]`;
+  private readonly SEARCH_LOC =
+    "//button[@data-test-id='qa-header-search-button']";
   private readonly CART_LOC = "//a[@data-test-id='qa-link-minicart']";
   private readonly FAVOURITE_LIST = "//a[@data-test-id='qa-link-wishlist']";
-  private readonly PROFILE_BUTTON_LOC = "//button[@data-test-id='qa-header-profile-button']";
+  private readonly PROFILE_BUTTON_LOC =
+    "//button[@data-test-id='qa-header-profile-button']";
 
   private justLandedBtn: Locator;
   private searchBtn: Locator;

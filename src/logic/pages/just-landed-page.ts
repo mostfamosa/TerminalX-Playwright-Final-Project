@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./base-page";
 
-export class justLanded extends BasePage {
+export class JustLanded extends BasePage {
   private readonly ITEM_IN_LIST = (index: number) => {
     return `//*[@class="product-list_yyTm"]//li[${index}]`;
   };
@@ -24,6 +24,6 @@ export class justLanded extends BasePage {
 
   async clickOnAddToFavourite(index: number) {
     this.addToFavourite = this.page.locator(this.ADD_TO_FAVOURITE(index));
-    await this.itemInList.click();
+    await this.addToFavourite.click();
   }
 }

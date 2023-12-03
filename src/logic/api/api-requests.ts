@@ -10,27 +10,28 @@ import { requestOptionsDeleteItemCart } from "./request/delete-item-cart-request
 
 import { urls } from "./api-urls.json";
 import { WishlistResponse } from "./response/get-wish-list-response";
+import { ResponseWrapper } from "./response/response-wrapper";
 
-export const addItemToCart = async (itemSku: string, quantity: number): Promise<AddItemToCartResponse> => {
-    return (await apiPostMethod(urls.addItemToCart, requestOptionsAddToCart(itemSku, quantity))).json();
+export const addItemToCart = async (itemSku: string, quantity: number): Promise<ResponseWrapper<AddItemToCartResponse>> => {
+    return await apiPostMethod(urls.addItemToCart, requestOptionsAddToCart(itemSku, quantity));
 }
 
-export const addItemToMyList = async (itemId: number): Promise<AddProductsToWishlistResponse> => {
-    return (await apiPostMethod(urls.addItemToMyList, requestOptionsAddToMyList(itemId))).json();
+export const addItemToMyList = async (itemId: number): Promise<ResponseWrapper<AddProductsToWishlistResponse>> => {
+    return await apiPostMethod(urls.addItemToMyList, requestOptionsAddToMyList(itemId));
 }
 
-export const currentUserInfo = async (): Promise<CurrentUserInfoResponse> => {
-    return (await apiPostMethod(urls.currentUserInfo, requestOptionsUserInfo())).json();
+export const currentUserInfo = async (): Promise<ResponseWrapper<CurrentUserInfoResponse>> => {
+    return await apiPostMethod(urls.currentUserInfo, requestOptionsUserInfo());
 }
 
-export const deleteItemFromListById = async (itemId: number): Promise<AddProductsToWishlistResponse> => {
-    return (await apiPostMethod(urls.deleteItemFromListById, requestOptionsDeleteItemList(itemId))).json();
+export const deleteItemFromListById = async (itemId: number): Promise<ResponseWrapper<AddProductsToWishlistResponse>> => {
+    return await apiPostMethod(urls.deleteItemFromListById, requestOptionsDeleteItemList(itemId));
 }
 
-export const deleteItemFromCartById = async (itemId: number): Promise<AddItemToCartResponse> => {
-    return (await apiPostMethod(urls.deleteItemFromCartById, requestOptionsDeleteItemCart(itemId))).json();
+export const deleteItemFromCartById = async (itemId: number): Promise<ResponseWrapper<AddItemToCartResponse>> => {
+    return await apiPostMethod(urls.deleteItemFromCartById, requestOptionsDeleteItemCart(itemId));
 }
 
-export const getUserWishList = async (): Promise<WishlistResponse> => {
-    return (await apiPostMethod(urls.userWishList)).json();
+export const getUserWishList = async (): Promise<ResponseWrapper<WishlistResponse>> => {
+    return await apiPostMethod(urls.userWishList);
 }
