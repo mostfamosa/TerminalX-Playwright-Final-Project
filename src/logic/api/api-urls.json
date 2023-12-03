@@ -1,0 +1,8 @@
+{
+    "urls": {
+        "addItemToCart": "https://www.terminalx.com/pg/MutationAddAnyProductsToAnyCart?v=t4MeNg4Nhm8cTtfc8ZbCpP00Dzo%3D",
+        "addItemToMyList": "https://www.terminalx.com/pg/MutationAddProductsToWishlist?v=o%2Fi6SZVDy2k6kuJd8zRFtjUC6Hs%3D",
+        "currentUserInfo": "https://www.terminalx.com/pg/QueryCurrentUserInfo?v=Vy487KOB%2FsDB%2F0cFkmdYWkLOsB8%3D",
+        "deleteItemFromCartById":"https://www.terminalx.com/pg/MutationRemoveItemFromAnyCart?v=wj1SQTLJ2rlXfTskhC3yArhKE9k%3D"
+    }
+}
