@@ -7,6 +7,7 @@ import { AddProductsToWishlistResponse } from "./response/add-item-mylist-respon
 import { CurrentUserInfoResponse } from "./response/current-user-info-response";
 import { requestOptionsDeleteItem } from "./request/delete-item-mylist-request";
 import { urls } from "./api-urls.json";
+import { WishlistResponse } from "./response/get-wish-list-response";
 
 export const addItemToCart = async (itemSku: string, quantity: number): Promise<AddItemToCartResponse> => {
     return (await apiPostMethod(urls.addItemToCart, requestOptionsAddToCart(itemSku, quantity))).json();
@@ -22,4 +23,8 @@ export const currentUserInfo = async (): Promise<CurrentUserInfoResponse> => {
 
 export const deleteItemFromListById = async (itemId: number): Promise<AddProductsToWishlistResponse> => {
     return (await apiPostMethod(urls.deleteItemFromListById, requestOptionsDeleteItem(itemId))).json();
+}
+
+export const getUserWishList = async (): Promise<WishlistResponse> => {
+    return (await apiPostMethod(urls.userWishList)).json();
 }

@@ -3,6 +3,7 @@
         "addItemToCart": "https://www.terminalx.com/pg/MutationAddAnyProductsToAnyCart?v=t4MeNg4Nhm8cTtfc8ZbCpP00Dzo%3D",
         "addItemToMyList": "https://www.terminalx.com/pg/MutationAddProductsToWishlist?v=o%2Fi6SZVDy2k6kuJd8zRFtjUC6Hs%3D",
         "currentUserInfo": "https://www.terminalx.com/pg/QueryCurrentUserInfo?v=Vy487KOB%2FsDB%2F0cFkmdYWkLOsB8%3D",
-        "deleteItemFromListById":"https://www.terminalx.com/pg/MutationRemoveProductsFromAnyWishlistById?v=h287aaTZzqucFBm5bEc305ztqE8%3D"
+        "deleteItemFromListById":"https://www.terminalx.com/pg/MutationRemoveProductsFromAnyWishlistById?v=h287aaTZzqucFBm5bEc305ztqE8%3D",
+        "userWishList":"https://www.terminalx.com/pg/QueryWishlist?v=AZXZ%2BBTNRTC2RafT6DjFg7dshlc%3D"
     }
 }
