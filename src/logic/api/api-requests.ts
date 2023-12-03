@@ -5,7 +5,9 @@ import { requestOptionsUserInfo } from "./request/current-user-info-request";
 import { AddItemToCartResponse } from "./response/add-item-cart-response";
 import { AddProductsToWishlistResponse } from "./response/add-item-mylist-response";
 import { CurrentUserInfoResponse } from "./response/current-user-info-response";
-import { requestOptionsDeleteItem } from "./request/delete-item-cart-request";
+import { requestOptionsDeleteItemList } from "./request/delete-item-mylist-request";
+import { requestOptionsDeleteItemCart } from "./request/delete-item-cart-request";
+
 import { urls } from "./api-urls.json";
 import { WishlistResponse } from "./response/get-wish-list-response";
 
@@ -22,7 +24,11 @@ export const currentUserInfo = async (): Promise<CurrentUserInfoResponse> => {
 }
 
 export const deleteItemFromListById = async (itemId: number): Promise<AddProductsToWishlistResponse> => {
-    return (await apiPostMethod(urls.deleteItemFromListById, requestOptionsDeleteItem(itemId))).json();
+    return (await apiPostMethod(urls.deleteItemFromListById, requestOptionsDeleteItemList(itemId))).json();
+}
+
+export const deleteItemFromCartById = async (itemId: number): Promise<AddItemToCartResponse> => {
+    return (await apiPostMethod(urls.deleteItemFromCartById, requestOptionsDeleteItemCart(itemId))).json();
 }
 
 export const getUserWishList = async (): Promise<WishlistResponse> => {
