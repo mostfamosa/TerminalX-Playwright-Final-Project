@@ -17,7 +17,7 @@ test.describe('stam test', () => {
      const gotoitem = new ItemPagee(page);
      await page.goto('https://www.terminalx.com/justlanded');
      
-     await gotoitem.hoverOverRandomItem(1);
+     await gotoitem.hoverOverRandomItem(3);
 
  
 
@@ -36,15 +36,15 @@ test.describe('stam test', () => {
 //     await page.goto('https://www.terminalx.com/on-sale');
 //     await page.waitForLoadState('load');
 //     await sale.hoverOverRandomItem(5);
-// })
-        let result1 = await addItemToMyList(products.nike_bag_with_logo_men.id);
-        await page.goto("https://www.terminalx.com/wishlist/items");
+// // })
+//         let result1 = await addItemToMyList(products.nike_bag_with_logo_men.id);
+//         await page.goto("https://www.terminalx.com/wishlist/items");
     
-        console.log(result1.data.data.addProductsToWishlist.anyWishlist.items[0].id);
-        await page.waitForTimeout(3000);
+//         console.log(result1.data.data.addProductsToWishlist.anyWishlist.items[0].id);
+//         await page.waitForTimeout(3000);
 
-        const fav = new FavouritePage(page);
-        await fav.itemInTheList(products.nike_bag_with_logo_men.name);
+//         const fav = new FavouritePage(page);
+//         await fav.itemInTheList(products.nike_bag_with_logo_men.name);
     
       
     
@@ -80,4 +80,4 @@ test.describe('stam test', () => {
     })
 })
 
-})
+

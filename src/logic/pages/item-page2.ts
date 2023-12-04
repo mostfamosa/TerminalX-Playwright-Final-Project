@@ -13,7 +13,8 @@ export class ItemPagee extends BasePage {
     }
 
     async hoverOverRandomItem(index: number) {
-        const itemDetails: string[] = [];
+        // const itemDetails: string[] = [];
+        const itemDetails: { name?: string ,color?: string, size?: string } = {};
 
         this.itemInList = await this.page.locator(this.ITEM_IN_LIST(index));
         await this.itemInList.hover({ timeout: 5000 });
@@ -24,20 +25,23 @@ export class ItemPagee extends BasePage {
 
         await this.page.waitForTimeout(3000);
 
-        // const colorTextContent = await this.selectAndClickColor();
-        // if (colorTextContent) {
-        //     itemDetails.push(colorTextContent);
-        // }
-        await this.page.waitForTimeout(3000);
-        const colors = await this.page.locator("//div[@class='color_FYIY']").nth(0);
-        await colors.click();
-        console.log(colors);
+        const name= await this.page.locator("h1[class='name_20R6']").textContent();
+        if(name){
+            itemDetails.name= name;
+        }
 
+        const colorTextContent = await this.selectRandomColor();
+        if ( colorTextContent) {
+            itemDetails.color=colorTextContent;
+           
+        }
+        await this.page.waitForTimeout(1000);
+      
         
-        // const sizeTextContent = await this.selectAndClickSize();
-        // if (sizeTextContent) {
-        //     itemDetails.push(sizeTextContent);
-        // }
+        const sizeTextContent = await this.selectRandomSize();
+        if (sizeTextContent) {
+            itemDetails.size= sizeTextContent;
+        }
 
         const cart = await this.page.locator("button[class='tx-link-a btn_nDwA tx-link_29YD btn_1UzJ btn-yellow_2tf3']");
         await cart.click();
@@ -45,25 +49,38 @@ export class ItemPagee extends BasePage {
         console.log(itemDetails);
     }
 
-    // private async selectAndClickColor(): Promise<string | null> {
-        
-    //     const colors = await this.page.locator("//div[@class='color_FYIY']");
-        
-    //     const randomColorIndex = Math.floor(Math.random() * await colors.count());
-    //     const randomColor = colors.nth(2);
-    //     await randomColor.click();
-    //     await randomColor.waitFor({ state: 'visible' });
-    //     const randomColorTextContent = await randomColor.textContent();
-    //     return randomColorTextContent;
-    // }
+    private async selectRandomColor(): Promise<string | null> {
+        const colors = await this.page.locator(".color_FYIY .color-item_1Y2Y");
+        const colorsCount = await colors.count();
+        if (colorsCount > 1) {
+            const randomColorIndex = Math.floor(Math.random() * colorsCount);
+            const randomColor = colors.nth(randomColorIndex);
+            await randomColor.click();
+            await this.page.waitForTimeout(1000);
+            
+            await randomColor.waitFor({ state: 'visible' });
+            const randomColorTitle = await randomColor.getAttribute('title');
+            return randomColorTitle || '';
 
-//     // private async selectAndClickSize(): Promise<string | null> {
-//     //     const sizeElements = await this.page.locator("div[class='size_1bXM'] .size-item_1Sai");
-//     //     const randomSizeIndex = Math.floor(Math.random() * await sizeElements.count());
-//     //     const randomSize = sizeElements.nth(randomSizeIndex);
-//     //     await randomSize.click();
-//     //     await randomSize.waitFor({ state: 'visible' });
-//     //     const randomSizeTextContent = await randomSize.textContent();
-//     //     return randomSizeTextContent;
-//     // }
-// }
+            // if the item has on color option
+        } else if (colorsCount === 1) {
+            const onlyColor = await colors.nth(0);
+            const onlyColorTextContent = await onlyColor.getAttribute('title');
+               return onlyColorTextContent || '';
+        }
+        console.log("No Colors Found!"); //i added this for debugging
+        return null;
+    }
+    
+    private async selectRandomSize(): Promise<string | null> {
+        const sizeElements = await this.page.locator("div[class='size_1bXM'] .size-item_1Sai");
+        const randomSizeIndex = Math.floor(Math.random() * await sizeElements.count());
+        const randomSize = sizeElements.nth(randomSizeIndex);
+        await randomSize.click();
+        await randomSize.waitFor({ state: 'visible' });
+        const randomSizeTextContent = await randomSize.textContent();
+        return randomSizeTextContent;
+    }
+
+ 
+}
