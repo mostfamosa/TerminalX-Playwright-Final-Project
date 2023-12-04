@@ -1,41 +1,34 @@
 import { expect, test as setup } from '@playwright/test';
 import { NavBar } from "../../logic/components/nav-bar"
 import { existsSync } from 'fs';
-
-const authFile = 'playwright/.auth/user.json';
-const userName = "nawras";
-const email = "knawras17@gmail.com"
-const password = "nawras123N@";
-const authUrl = "https://www.terminalx.com/pg/MutationUserLogin";
-const url = "https://www.terminalx.com/pg/MutationUserLogin";
-const homePageUrl = "https://www.terminalx.com/";
+import { auth } from '../../config/auth.json'
 
 setup('authenticate', async ({ browser, request }) => {
-    if (existsSync(authFile)) {
+    if (existsSync(auth.auth_file)) {
         return
     }
-    const res = await request.post(
-        authUrl,
+    await request.post(
+        auth.auth_url,
         {
             data: {
-                username: email,
-                password: password
+                username: auth.email,
+                password: auth.password
             },
         }
     );
     const state = await request.storageState();
     await request.post(
-        url,
+        auth.auth_url,
         {
             data: {
-                sku: ["Z755900001"], attributes: ["93"], values: ["4"]
+                sku: [auth.default_sku], attributes: [auth.default_attributes], values: [auth.default_values]
             }
         }
     );
     const context = await browser.newContext({ storageState: state });
     const page = await context.newPage();
-    await page.goto(homePageUrl);
+    await page.goto(auth.home_page_url);
     const nav = new NavBar(page);
-    expect(await nav.getProfileName()).toContain(userName);
-    await page.context().storageState({ path: authFile });
+    expect(await nav.getProfileName()).toContain(auth.user_name);
+    await page.context().storageState({ path: auth.auth_file });
 });
