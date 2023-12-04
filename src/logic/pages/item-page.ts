@@ -36,9 +36,7 @@ export class ItemPage extends BasePage {
         const randomIndex = Math.floor(Math.random() * listSize);
         const randomElement = await colorOption.nth(randomIndex);
         
-        
-            // Wait for the element to be visible with a timeout of 5000 milliseconds (5 seconds)
-            await randomElement.waitFor({ state: 'visible', timeout: 10000 });
+                    await randomElement.waitFor({ state: 'visible', timeout: 10000 });
 
             // Check if the element is still visible
             if (await randomElement.isVisible()) {
