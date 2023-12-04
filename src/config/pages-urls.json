@@ -1,0 +1,10 @@
+{
+    "urls": {
+        "base_page": "https://www.terminalx.com",
+        "my_list_page": "https://www.terminalx.com/wishlist/items",
+        "my_cart_page": "https://www.terminalx.com/checkout/cart",
+        "just_landed_page":"https://www.terminalx.com/justlanded",
+        "on_sale_page":"https://www.terminalx.com/on-sale",
+        "search_page":"https://www.terminalx.com/catalogsearch/result/?q="
+    }
+}
