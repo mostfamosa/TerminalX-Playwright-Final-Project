@@ -15,6 +15,10 @@ export class HomePage extends BasePage {
     await this.navBar.clickJustLanded();
   }
 
+  async clickOnSaleFromNavBar() {
+    await this.navBar.clickOnSale();
+  }
+
   async clickSearchFromNavBar() {
     await this.navBar.clickSearch();
   }
@@ -22,11 +26,11 @@ export class HomePage extends BasePage {
   async clickCartFromNavBar() {
     await this.navBar.clickCart();
   }
-  async clickFavouriteFromNavbar(){
+  async clickFavouriteFromNavbar() {
     await this.navBar.clickFavourite()
 
   }
-  async clickProfileFromNavbar(){
+  async clickProfileFromNavbar() {
     await this.navBar.clickOnProfileName()
   }
 }
