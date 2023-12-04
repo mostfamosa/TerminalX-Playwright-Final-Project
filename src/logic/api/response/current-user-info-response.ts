@@ -69,6 +69,12 @@ export interface CurrentUserInfoResponse {
                             };
                         };
                     };
+                    configurable_options: Array<{
+                        id: number;
+                        option_label: string;
+                        value_id: number;
+                        value_label: string;
+                    }>;
                     quantity: number;
                     prices: {
                         price: {
