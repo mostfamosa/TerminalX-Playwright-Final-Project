@@ -95,6 +95,4 @@ export class ItemPagee extends BasePage {
         const randomSizeTextContent = await randomSize.textContent();
         return randomSizeTextContent;
     }
-
- 
 }
