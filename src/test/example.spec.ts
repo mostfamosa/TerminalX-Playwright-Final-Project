@@ -5,6 +5,7 @@ import { FavouritePage } from '../logic/pages/favourite-page';
 import { ItemPage } from '../logic/pages/item-page';
 import { JustLanded } from '../logic/pages/just-landed-page';
 import { SalePage } from '../logic/pages/sale-page';
+import { ItemPagee } from '../logic/pages/item-page2';
 
 
 test.describe('stam test', () => {
@@ -13,11 +14,12 @@ test.describe('stam test', () => {
 
  
     //add item using UI
-     const gotoitem = new JustLanded(page);
-     await page.goto('https://www.terminalx.com/justlanded')
-     await gotoitem.clickOnRandomItem(11);
-     const add = new ItemPage(page);
-     add.ClickAddToCart();
+     const gotoitem = new ItemPagee(page);
+     await page.goto('https://www.terminalx.com/justlanded');
+     
+     await gotoitem.hoverOverRandomItem(1);
+
+ 
 
 //     await page.waitForTimeout(3000);
 
