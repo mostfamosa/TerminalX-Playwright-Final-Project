@@ -5,6 +5,7 @@ import { FavouritePage } from '../logic/pages/favourite-page';
 import { ItemPage } from '../logic/pages/item-page';
 import { JustLanded } from '../logic/pages/just-landed-page';
 import { SalePage } from '../logic/pages/sale-page';
+import { ItemPagee } from '../logic/pages/item-page2';
 
 
 test.describe('stam test', () => {
@@ -13,11 +14,12 @@ test.describe('stam test', () => {
 
  
     //add item using UI
-     const gotoitem = new JustLanded(page);
-     await page.goto('https://www.terminalx.com/justlanded')
-     await gotoitem.clickOnRandomItem(11);
-     const add = new ItemPage(page);
-     add.ClickAddToCart();
+     const gotoitem = new ItemPagee(page);
+     await page.goto('https://www.terminalx.com/justlanded');
+     
+     await gotoitem.hoverOverRandomItem(3);
+
+ 
 
 //     await page.waitForTimeout(3000);
 
@@ -34,15 +36,15 @@ test.describe('stam test', () => {
 //     await page.goto('https://www.terminalx.com/on-sale');
 //     await page.waitForLoadState('load');
 //     await sale.hoverOverRandomItem(5);
-// })
-        let result1 = await addItemToMyList(products.nike_bag_with_logo_men.id);
-        await page.goto("https://www.terminalx.com/wishlist/items");
+// // })
+//         let result1 = await addItemToMyList(products.nike_bag_with_logo_men.id);
+//         await page.goto("https://www.terminalx.com/wishlist/items");
     
-        console.log(result1.data.data.addProductsToWishlist.anyWishlist.items[0].id);
-        await page.waitForTimeout(3000);
+//         console.log(result1.data.data.addProductsToWishlist.anyWishlist.items[0].id);
+//         await page.waitForTimeout(3000);
 
-        const fav = new FavouritePage(page);
-        await fav.itemInTheList(products.nike_bag_with_logo_men.name);
+//         const fav = new FavouritePage(page);
+//         await fav.itemInTheList(products.nike_bag_with_logo_men.name);
     
       
     
@@ -78,4 +80,4 @@ test.describe('stam test', () => {
     })
 })
 
-})
+
