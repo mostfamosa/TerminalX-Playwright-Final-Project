@@ -9,13 +9,10 @@ export class JustLanded extends BasePage {
   private readonly ADD_TO_FAVOURITE = (index: number) => {
     return `(//div[@class='btn-quick_3Pv7 btn-my_list_2EOz'])[${index}]`;
   };
-  private readonly PRODUCT_LINK = (index: number) => {
-    return `${this.ITEM_IN_LIST(index)}//a[@data-test-id="product-link"]`;
-  }
+  
 
   private itemInList: Locator;
   private addToFavourite: Locator;
-  private productLink: Locator;
 
   constructor(page: Page) {
     super(page);

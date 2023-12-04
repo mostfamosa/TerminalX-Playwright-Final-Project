@@ -4,6 +4,7 @@ import { products } from "../logic/api/items-test.json";
 import { FavouritePage } from '../logic/pages/favourite-page';
 import { ItemPage } from '../logic/pages/item-page';
 import { JustLanded } from '../logic/pages/just-landed-page';
+import { SalePage } from '../logic/pages/sale-page';
 
 
 test.describe('stam test', () => {
@@ -68,22 +69,25 @@ test.describe('stam test', () => {
 
 
     //add item using UI
-    const gotoitem = new JustLanded(page);
-    await page.goto('https://www.terminalx.com/justlanded')
-    await gotoitem.clickOnRandomItem(11);
+    // const gotoitem = new JustLanded(page);
+    // await page.goto('https://www.terminalx.com/justlanded')
+    // await gotoitem.clickOnRandomItem(11);
 
-    await page.waitForTimeout(3000);
+//     await page.waitForTimeout(3000);
 
- const add = new ItemPage(page);
+//  const add = new ItemPage(page);
 
-    // page.waitForLoadState();
-    await page.waitForLoadState('load');
+//     // page.waitForLoadState();
+//     await page.waitForLoadState('load');
 
- // add.RandomColor();
-   add.CHooseSize();
+//  // add.RandomColor();
+//    add.CHooseSize();
     // add.ClickAddToCart();
 
-
+    const sale = new SalePage(page);
+    await page.goto('https://www.terminalx.com/on-sale');
+    await page.waitForLoadState('load');
+    await sale.hoverOverRandomItem(5);
 })
 })
 
