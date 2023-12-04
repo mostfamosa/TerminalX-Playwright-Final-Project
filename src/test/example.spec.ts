@@ -2,28 +2,39 @@ import { test, expect } from '@playwright/test';
 import { addItemToCart, addItemToMyList, currentUserInfo, deleteItemFromCartById, deleteItemFromListById, getUserWishList } from '../logic/api/api-requests';
 import { products } from "../config/items-test.json";
 import { FavouritePage } from '../logic/pages/favourite-page';
+import { ItemPage } from '../logic/pages/item-page';
+import { JustLanded } from '../logic/pages/just-landed-page';
+import { SalePage } from '../logic/pages/sale-page';
 
 
 test.describe('stam test', () => {
 
     test('add item to cart', async ({ page }) => {
 
-        // //add item to cart and delete it
-        // await addItemToCart(products.baby_overalls_animals_boys.sku, 1);
-        // await page.goto("https://www.terminalx.com/checkout/cart");
+ 
+    //add item using UI
+     const gotoitem = new JustLanded(page);
+     await page.goto('https://www.terminalx.com/justlanded')
+     await gotoitem.clickOnRandomItem(11);
+     const add = new ItemPage(page);
+     add.ClickAddToCart();
 
-        // let result2 = await currentUserInfo();
-        // console.log(result2.data.currentUserInfo.cart_object.items[0].id);
-
-        // let f = await deleteItemFromCartById(Number.parseInt(result2.data.currentUserInfo.cart_object.items[0].id));
-        // console.log(f.data);
-        // await page.reload();
-        // await page.waitForTimeout(3000);
-        // /* *********************************************** */
+//     await page.waitForTimeout(3000);
 
 
-        await page.goto("https://www.terminalx.com");
+//     // page.waitForLoadState();
+//     await page.waitForLoadState('load');
 
+//  // add.RandomColor();
+//    add.CHooseSize();
+    // add.ClickAddToCart();
+
+
+//     const sale = new SalePage(page);
+//     await page.goto('https://www.terminalx.com/on-sale');
+//     await page.waitForLoadState('load');
+//     await sale.hoverOverRandomItem(5);
+// })
         let result1 = await addItemToMyList(products.nike_bag_with_logo_men.id);
         await page.goto("https://www.terminalx.com/wishlist/items");
     
@@ -67,4 +78,4 @@ test.describe('stam test', () => {
     })
 })
 
-
+})

@@ -4,9 +4,9 @@ import { Locator, Page } from '@playwright/test';
 export class ItemPage extends BasePage {
   private readonly ADD_TO_CART_LOCATOR = "button[class='tx-link-a btn_nDwA tx-link_29YD btn_1UzJ btn-yellow_2tf3']";
   private readonly ITEM_NAME_LOCATOR = "div[class='name-and-brand_m2Cb rtl_3N3l']";
-  private readonly ITEM_COLOR_NAME_LOCATOR = "span[class='label-static_3ya-']";
-  private readonly COLOR_OPTIONS_LOCATOR = "div[class='color_FYIY']";
-  private readonly ITEM_SIZE_LOCATOR = "div[class='label-static_3ya- label-sizes_1dUf']";
+  private readonly ITEM_COLOR_NAME_LOCATOR = "span[class='label-dynamic_3Y3S']";
+  private readonly COLOR_OPTIONS_LOCATOR = ("//div[@class='color_FYIY']");
+  private readonly ITEM_SIZE_LOCATOR = "div[class='size_1bXM']";
   private readonly ITEAM_SIZE_OPTIONS = "div[class='size_1bXM']";
 
 
@@ -25,125 +25,63 @@ export class ItemPage extends BasePage {
     this.itemSize = page.locator(this.ITEM_SIZE_LOCATOR);
     this.sizeOptions = page.locator(this.ITEAM_SIZE_OPTIONS);
     this.colorOptions = page.locator(this.COLOR_OPTIONS_LOCATOR);
-    this.initpage();
   }
-  async initpage() {
-    await this.page.locator("div[class='slick-gutter-namespace']").waitFor();
-  }
-  
- 
+  async RandomColor() {
+    try{
+    const colorOption = this.colorOptions.locator('div[data-test-id="qa-color-item"]');
+    const listSize = await colorOption.count();
+    console.log("the list size: ", listSize);
 
-  private async getAvailableItems(): Promise<string[]> {
-    const sizeElements = await this.page.locator(this.COLOR_OPTIONS_LOCATOR).all();
-    const sizes = await Promise.all(sizeElements.map(async (sizeElement) => {
-      const textContent = await sizeElement.textContent();
-      const classList = await sizeElement.getAttribute('class');
-      const isAvailable = !classList?.includes('not-available_3iVZ');
-  
-      return isAvailable ? (textContent !== null ? textContent : '') : null;
-    }));
-  
-    return sizes.filter((size) => size !== null) as string[];
-  }
-  
+    if (listSize > 0) {
+        const randomIndex = Math.floor(Math.random() * listSize);
+        const randomElement = await colorOption.nth(randomIndex);
+        
+                    await randomElement.waitFor({ state: 'visible', timeout: 10000 });
 
-  private getRandomNumber(sizes: string[]): string | null {
-    if (sizes.length === 0) {
-      return null; 
+            // Check if the element is still visible
+            if (await randomElement.isVisible()) {
+                const randomColor = await this.itemColor.textContent();
+                console.log('Random Color:', randomColor);
+
+                await randomElement.click();
+            }
+          }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
-    const randomIndex = Math.floor(Math.random() * sizes.length);
-    return sizes[randomIndex];
-  }
-  public async chooseRandomColor(): Promise<string | null> {
-    const availableColors = await this.getAvailableItems();
-    const randomColor = this.getRandomNumber(availableColors);
-  
-    if (randomColor !== null) {
-      const colorElement = await this.colorOptions.locator(`:has-text("${randomColor}")`).first();
-      await colorElement.click();
-      console.log(`Clicked on color: ${randomColor}`);
-    } else {
-      console.log('No available colors.');
+
+
+async CHooseSize(){
+  try{
+  const sizeOption = await this.sizeOptions.locator("div[class='size-item_1Sai rtl_3a50']");
+  const listSize = await sizeOption.count();
+  console.log("the list size: ", listSize);
+
+  if (listSize > 0) {
+    const randomIndex = Math.floor(Math.random() * listSize);
+    await sizeOption.waitFor({ state: 'visible', timeout: 15000 });
+
+    const randomElement = await sizeOption.nth(randomIndex);
+      await randomElement.waitFor({ state: 'visible', timeout: 10000 });
+
+      if (await randomElement.isVisible()) {
+          const randomSize = await this.itemSize.textContent();
+          console.log('Random size:', randomSize);
+
+          await randomElement.click();
+      }
     }
-  
-    return randomColor;
+  } catch (error) {
+      console.error('Error:', error);
   }
-  
-
-
-
-
-
-  // // private async ChooseColor(color: string) {
-  // //   const outOfStouck = this.page.locator("form.black-box_2mpQ")
-  // //   const myColor = this.colorOptions.locator(`:has-text("${color}")`);
-  // //   await myColor.click();
-
-  // //   if (await outOfStouck.isVisible()) {
-  // //     console.log(`Color ${color} is out of stock.`);
-  // //   }
-  // //   else {
-  // //     console.log(`${color} Selected`);
-  // //     return color;
-  // //   }
-  // }
-
-  ////////////////////////////////////////////////////////////////////
-
-  // private async getAvailableSizes(): Promise<string[]> {
-  //   const sizeElements = await this.page.locator(this.ITEAM_SIZE_OPTIONS).all();
-  //   const sizes = await Promise.all(sizeElements.map(async (sizeElement) => {
-  //     const textContent = await sizeElement.textContent();
-  //     const classList = await sizeElement.getAttribute('class');
-  //     const isAvailable = !classList?.includes('not-available_3iVZ');
-  
-  //     return isAvailable ? (textContent !== null ? textContent : '') : null;
-  //   }));
-  
-  //   return sizes.filter((size) => size !== null) as string[];
-  // }
-  
-
-  // private getRandomSize(sizes: string[]): string | null {
-  //   if (sizes.length === 0) {
-  //     return null; 
-  //   }
-  //   const randomIndex = Math.floor(Math.random() * sizes.length);
-  //   return sizes[randomIndex];
-  // }
-
-
-  public async chooseRandomSize(): Promise<string | null> {
-    const availableSizes = await this.getAvailableItems();
-    const randomSize = this.getRandomNumber(availableSizes);
-    if (randomSize !== null) {
-      console.log(`Selected random size: ${randomSize}`);
-      const sizeElement = await this.sizeOptions.locator(`div[title="${randomSize}"]`).first();
-      await sizeElement.click();
-      console.log(`Clicked on size: ${randomSize}`);
-    } else {
-      console.log('No available sizes.');
     }
-    return randomSize;
-  }
+    async ClickAddToCart(){
+      this.addToCart.click();
 
-  // private async ChooseSizer(size: number) {
-  //   const outOfStouck = this.page.locator("form.black-box_2mpQ")
-  //   const mySize = this.sizeOptions.locator(`:has-text("${size}")`);
-  //   await mySize.click();
+    }
+    async getItemName(){
+      return (this.itemName.textContent);
+    }
 
-  //   if (await outOfStouck.isVisible()) {
-  //     console.log(`Size ${size} is out of stock.`);
-  //   }
-  //   else {
-  //     console.log(`${size} Selected`);
-  //     return size;
-  //   }
-
-  // }
-
-  private async ClickAddToCart() {
-    await this.addToCart.click();
-  }
-}
-
+      }
