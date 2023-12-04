@@ -8,7 +8,7 @@ import { CurrentUserInfoResponse } from "./response/current-user-info-response";
 import { requestOptionsDeleteItemList } from "./request/delete-item-mylist-request";
 import { requestOptionsDeleteItemCart } from "./request/delete-item-cart-request";
 
-import { urls } from "./api-urls.json";
+import { urls } from "../../config/api-urls.json";
 import { WishlistResponse } from "./response/get-wish-list-response";
 import { ResponseWrapper } from "./response/response-wrapper";
 

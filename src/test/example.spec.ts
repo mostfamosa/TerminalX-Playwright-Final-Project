@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { addItemToCart, addItemToMyList, currentUserInfo, deleteItemFromCartById, deleteItemFromListById, getUserWishList } from '../logic/api/api-requests';
-import { products } from "../logic/api/items-test.json";
+import { products } from "../config/items-test.json";
 import { FavouritePage } from '../logic/pages/favourite-page';
 
 
@@ -27,7 +27,7 @@ test.describe('stam test', () => {
         let result1 = await addItemToMyList(products.nike_bag_with_logo_men.id);
         await page.goto("https://www.terminalx.com/wishlist/items");
     
-        console.log(result1.data.addProductsToWishlist.anyWishlist.items[0].id);
+        console.log(result1.data.data.addProductsToWishlist.anyWishlist.items[0].id);
         await page.waitForTimeout(3000);
 
         const fav = new FavouritePage(page);
