@@ -5,11 +5,25 @@ export class ItemPagee extends BasePage {
     private readonly ITEM_IN_LIST = (index: number) => {
         return `//*[@class="product-list_yyTm"]//li[${index}]`;
     };
+    private readonly SIZE_OPTIONS = "div[class='size_1bXM'] .size-item_1Sai";
+    private readonly COLOR_OPTIONS=".color_FYIY .color-item_1Y2Y";
+    private readonly TITLE ="h1[class='name_20R6']";
+    private readonly ADD_TO_CART = "button[class='tx-link-a btn_nDwA tx-link_29YD btn_1UzJ btn-yellow_2tf3']";
     private OVER_VIEW = "//div[@class='btn-quick_3Pv7 btn-quick-view_2SXw']";
     private itemInList: Locator;
+    private addToCart:Locator;
+    private sizeList:Locator;
+    private colorList: Locator;
+    private itemName:Locator;
 
     constructor(page: Page) {
         super(page)
+        this.addToCart = this.page.locator(this.ADD_TO_CART);
+        this.sizeList= this.page.locator(this.SIZE_OPTIONS);
+        this.colorList=this.page.locator(this.COLOR_OPTIONS);
+        this.itemName = this.page.locator(this.TITLE);
+
+        
     }
 
     async hoverOverRandomItem(index: number) {
@@ -25,7 +39,7 @@ export class ItemPagee extends BasePage {
 
         await this.page.waitForTimeout(3000);
 
-        const name= await this.page.locator("h1[class='name_20R6']").textContent();
+        const name= await this.itemName.textContent();
         if(name){
             itemDetails.name= name;
         }
@@ -43,14 +57,14 @@ export class ItemPagee extends BasePage {
             itemDetails.size= sizeTextContent;
         }
 
-        const cart = await this.page.locator("button[class='tx-link-a btn_nDwA tx-link_29YD btn_1UzJ btn-yellow_2tf3']");
+        const cart = await this.addToCart;
         await cart.click();
 
         console.log(itemDetails);
     }
 
     private async selectRandomColor(): Promise<string | null> {
-        const colors = await this.page.locator(".color_FYIY .color-item_1Y2Y");
+        const colors = await this.colorList;
         const colorsCount = await colors.count();
         if (colorsCount > 1) {
             const randomColorIndex = Math.floor(Math.random() * colorsCount);
@@ -73,7 +87,7 @@ export class ItemPagee extends BasePage {
     }
     
     private async selectRandomSize(): Promise<string | null> {
-        const sizeElements = await this.page.locator("div[class='size_1bXM'] .size-item_1Sai");
+        const sizeElements = await this.sizeList;
         const randomSizeIndex = Math.floor(Math.random() * await sizeElements.count());
         const randomSize = sizeElements.nth(randomSizeIndex);
         await randomSize.click();
@@ -81,6 +95,4 @@ export class ItemPagee extends BasePage {
         const randomSizeTextContent = await randomSize.textContent();
         return randomSizeTextContent;
     }
-
- 
 }
