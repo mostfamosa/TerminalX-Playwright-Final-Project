@@ -2,52 +2,91 @@ import { BasePage } from "./base-page";
 import { Page, ElementHandle, Locator } from '@playwright/test';
 
 export class FavouritePage extends BasePage {
-    private readonly ITEMS_LIST_LOCATOR = "div[class='listing_2tNy']";
-    private readonly ITEM_NAME_LOC = (itemname)=> `//a[text()="${itemname}"]`
+  private readonly ITEMS_LIST_LOCATOR = "div[class='listing_2tNy']";
+  private readonly ITEM_NAME_LOC = (itemname) => `//a[text()="${itemname}"]`
 
-    private readonly CART = "//div[@class='cart-items-list_wmqo']";
-    private readonly ITEMS_CARD = "//div[@class='container_1XqK']";
-    private readonly ITEMS_NAME_LINK = "(//a[@class='tx-link-a name_1GBQ tx-link_29YD'])";
-    private readonly ITEM_BRAND = (index: number) => `//div[@class="container_1XqK"][${index}]/div/div[1]/div/strong/div`;
-    private readonly ITEM_LINK = (index: number) => `(//a[@class='tx-link-a name_1GBQ tx-link_29YD'])[${index}]`;
-    private readonly ITEM_COLOR = (index: number) => `//div[@class="container_1XqK"][${index}]/div/div[1]/div/div/div[1]/span[@data-test-id="qa-item-color-value"]`;
-    private readonly ITEM_SIZE = (index: number) => `//div[@class="container_1XqK"][${index}]/div/div[1]/div/div/div[2]/span[@data-test-id="qa-item-size-value"]`;
-    private readonly TOTAL_PRICE_ITEM = (index: number) => `//div[@class="container_1XqK"][${index}]/div/div[@class="cart-item_3yl1 rtl_3YUG"]/div[@class="column_34Ze total-price_rLA-"]`;
-    private readonly REGULAR_PRICE_ITEM = (index: number) => `(//div[@class='row_2tcG strikethrough_t2Ab price_kIgR'])[${index}]`;
-    private readonly FINAL_PRICE_ITEM = (index: number) => `(//div[@class='row_2tcG bold_2wBM price-final_13zw'])[${index}]`;
-    private readonly DISCOUNT_ITEM = (index: number) => `(//a[@class='tx-link-a stampa-sales_3gHT link_3vu6 tx-link_29YD'])[${index}]`;
-    private readonly QUANTITY_ITEM = (index: number) => `(//div[@class='select-container_tSy-'])[${index}]`;
-  
-  
-    private itemBrand: Locator;
-    private itemBrandLink: Locator;
-    private itemColor: Locator;
-    private itemSize: Locator;
-    private itemTotalPrice: Locator;
-    private regularPriceItem: Locator;
-    private finalPriceItem: Locator;
-    private discountItem: Locator;
-    private quantityItem: Locator;
-  
-    private itemName : Locator
+  private readonly CART = "//div[@class='listing_2tNy']";
+  private readonly ITEMS_CARD = "//li[@class='wishlist-product_2rk-']";
+  private readonly ITEMS_NAME_LINK = `(//a[contains(@class,'tx-link-a title_3ZxJ')])`;
+  private readonly ITEM_BRAND = (index: number) => `//li[${index}]//div[@class="right_1o65"]//span`;
+  private readonly ITEM_COLOR = (index: number) => `(//div[@class='wrap_3QMJ rtl_2lAP'])[${index}]//span[contains(text(),'צבע')]`;
+  private readonly ITEM_SIZE = (index: number) => `(//div[@class='wrap_3QMJ rtl_2lAP'])[${index}]//span[contains(text(),'מידה')]`;
+  private readonly REGULAR_PRICE_ITEM = (index: number) => `//li[${index}]//div[@class='row_2tcG strikethrough_t2Ab regular-price_35Lt']`;
+  private readonly FINAL_PRICE_ITEM = (index: number) => `//li[${index}]//div[@class='row_2tcG bold_2wBM final-price_8CiX']`;
+  private readonly DISCOUNT_ITEM = (index: number) => `//li[${index}]//a[@class='tx-link-a stampa-sales_3ITt rtl_1_TU link_3vu6 tx-link_29YD']`;
 
-    constructor(page: Page) {
-        super(page);
+
+  private itemBrand: Locator;
+  private itemColor: Locator;
+  private itemSize: Locator;
+  private regularPriceItem: Locator;
+  private finalPriceItem: Locator;
+  private discountItem: Locator;
+
+  private itemName: Locator
+
+  constructor(page: Page) {
+    super(page);
+  }
+
+
+  async itemInTheList(itemname: string): Promise<boolean> {
+    // i want to check if the itemname exists in the list ITEMS_LIST_LOCATOR
+    this.itemName = this.page.locator(this.ITEM_NAME_LOC(itemname))
+    if (this.itemName != null) {
+      console.log(await this.itemName.textContent());
+      return true;
+    }
+    else {
+      console.log('null')
+      return false
     }
 
-
-
-    async itemInTheList(itemname: string): Promise<boolean> {
-        // i want to check if the itemname exists in the list ITEMS_LIST_LOCATOR
-        this.itemName = this.page.locator(this.ITEM_NAME_LOC(itemname))
-        if (this.itemName != null) {
-            console.log(await this.itemName.textContent());
-            return true;
-        }
-        else {
-            console.log('null')
-            return false
-        }
-
+  }
+  async findItemIndexByNameLink(nameLink: string) {
+    for (let i = 1; i <= await this.page.locator(this.ITEMS_CARD).count(); i++) {
+      let currentName = await this.page.locator(`${this.ITEMS_NAME_LINK}[${i}]`).textContent();
+      if (currentName === nameLink)
+        return i;
     }
+    console.log(`The Name: ${nameLink} is not found!`);
+  }
+
+  async getItemBrandName(index: number) {
+    this.itemBrand = this.page.locator(this.ITEM_BRAND(index));
+    return await this.itemBrand.textContent();
+  }
+
+
+  async getItemColor(index: number) {
+    this.itemColor = this.page.locator(this.ITEM_COLOR(index));
+    return await this.itemColor.textContent();
+  }
+
+  async getItemSize(index: number) {
+    this.itemSize = this.page.locator(this.ITEM_SIZE(index));
+    return await this.itemSize.textContent();
+  }
+
+  async getItemRegularPrice(index: number) {
+    this.regularPriceItem = this.page.locator(this.REGULAR_PRICE_ITEM(index));
+    let price = await this.regularPriceItem.textContent();
+    if (price != null)
+      return parseFloat(price);
+  }
+
+  async getItemFinalPrice(index: number) {
+    this.finalPriceItem = this.page.locator(this.FINAL_PRICE_ITEM(index));
+    let price = await this.finalPriceItem.textContent();
+    if (price != null)
+      return parseFloat(price);
+  }
+
+  async getItemDiscountPercentage(index: number) {
+    this.discountItem = this.page.locator(this.DISCOUNT_ITEM(index));
+    let price = await this.discountItem.textContent();
+    if (price != null)
+      return parseFloat(price);
+  }
+
 }
