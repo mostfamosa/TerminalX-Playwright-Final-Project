@@ -14,6 +14,11 @@ export interface AddProductsToWishlistResponse {
                         id: number;
                         visibility: string;
                         status: string;
+                        brand_url: {
+                            brand: number,
+                            name: string,
+                            url: string
+                        },
                         thumbnail: {
                             label: string;
                         };
