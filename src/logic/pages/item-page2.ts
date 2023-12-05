@@ -9,7 +9,9 @@ export class ItemPagee extends BasePage {
     private readonly COLOR_OPTIONS=".color_FYIY .color-item_1Y2Y";
     private readonly TITLE ="h1[class='name_20R6']";
     private readonly ADD_TO_CART = "button[class='tx-link-a btn_nDwA tx-link_29YD btn_1UzJ btn-yellow_2tf3']";
-    private OVER_VIEW = "//div[@class='btn-quick_3Pv7 btn-quick-view_2SXw']";
+    private readonly OVER_VIEW = "//div[@class='btn-quick_3Pv7 btn-quick-view_2SXw']";
+   
+    
     private itemInList: Locator;
     private addToCart:Locator;
     private sizeList:Locator;
@@ -27,17 +29,15 @@ export class ItemPagee extends BasePage {
     }
 
     async hoverOverRandomItem(index: number) {
-        // const itemDetails: string[] = [];
         const itemDetails: { name?: string ,color?: string, size?: string } = {};
 
         this.itemInList = await this.page.locator(this.ITEM_IN_LIST(index));
         await this.itemInList.hover({ timeout: 5000 });
 
-        await this.page.waitForTimeout(3000);
+       
         const overView = await this.page.locator(this.OVER_VIEW).nth(index);
         await overView.click();
 
-        await this.page.waitForTimeout(3000);
 
         const name= await this.itemName.textContent();
         if(name){
@@ -49,9 +49,7 @@ export class ItemPagee extends BasePage {
             itemDetails.color=colorTextContent;
            
         }
-        await this.page.waitForTimeout(1000);
-      
-        
+    
         const sizeTextContent = await this.selectRandomSize();
         if (sizeTextContent) {
             itemDetails.size= sizeTextContent;
@@ -86,6 +84,7 @@ export class ItemPagee extends BasePage {
         return null;
     }
     
+   
     private async selectRandomSize(): Promise<string | null> {
         const sizeElements = await this.sizeList;
         const randomSizeIndex = Math.floor(Math.random() * await sizeElements.count());
@@ -95,4 +94,6 @@ export class ItemPagee extends BasePage {
         const randomSizeTextContent = await randomSize.textContent();
         return randomSizeTextContent;
     }
+
 }
+
