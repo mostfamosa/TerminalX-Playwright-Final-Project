@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test';
+import { urls } from '../../config/pages-urls.json'
 
 export class BasePage {
     protected page: Page;
@@ -25,5 +26,9 @@ export class BasePage {
 
     async switchToNewTab() {
         await this.page.bringToFront();
+    }
+
+    async search(searchKey: string) {
+        await this.navigateTo(urls.search_page + searchKey);
     }
 }
