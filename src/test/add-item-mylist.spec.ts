@@ -42,6 +42,7 @@ test.describe.serial("Add product to MyList Validations Suite", () => {
     console.log(await favPage.getItemRegularPrice(index));
     console.log(await favPage.getItemFinalPrice(index));
     console.log(await favPage.getItemSize(index));
+    
 
   });
 });
