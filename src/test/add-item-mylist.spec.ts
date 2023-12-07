@@ -5,11 +5,15 @@ import { products } from "../config/items-test.json";
 import { FavouritePage } from "../logic/pages/favourite-page";
 import { ResponseWrapper } from "../logic/api/response/response-wrapper";
 import { AddProductsToWishlistResponse } from "../logic/api/response/add-item-mylist-response";
+import { MyListHandler } from "../logic/responseHandler/mylist-add-item-handler";
 
 test.describe.serial("Add product to MyList Validations Suite", () => {
   let browser: Browser;
   let favPage: FavouritePage;
   let apiResult: ResponseWrapper<AddProductsToWishlistResponse>;
+  let myListHandler: MyListHandler;
+  let name: string;
+  let index: number;
 
   test.beforeAll(async () => {
     browser = await chromium.launch();
@@ -18,9 +22,16 @@ test.describe.serial("Add product to MyList Validations Suite", () => {
     await page.goto(urls.my_list_page);
     await page.setViewportSize({ width: 1920, height: 1080 });
 
-    //apiResult = await addItemToMyList(products.baby_overalls_animals_boys.id);
-    //await page.reload();
+    apiResult = await addItemToMyList(products.beauty_kit_women.id);
+    await page.reload();
+
+    myListHandler = new MyListHandler(apiResult);
+
     favPage = new FavouritePage(page);
+
+    name = myListHandler.getNewestItemLabel(products.beauty_kit_women.id);
+    index = Number(await favPage.findItemIndexByNameLink(name));
+
   });
   test.afterEach(async ({ page }) => {
     await page.close();
@@ -30,19 +41,24 @@ test.describe.serial("Add product to MyList Validations Suite", () => {
   });
 
   test("Add item by api to MyList -> Validate Response is truthy", async () => {
-    // console.log(apiResult.data.data.addProductsToWishlist.anyWishlist.items[0].product.price_range.maximum_price);
-    // console.log(apiResult.data.data.addProductsToWishlist.anyWishlist.items[0].product.thumbnail.label);
-    // expect.soft(apiResult.ok).toBeTruthy();
-    // expect.soft(apiResult.status).toBe(200);
-    let index = Number(await favPage.findItemIndexByNameLink("טי שירט עם הדפס / 6M-3Y"));
-    console.log(index);
-    console.log(await favPage.getItemBrandName(index));
-    console.log(await favPage.getItemColor(index));
-    console.log(await favPage.getItemDiscountPercentage(index));
-    console.log(await favPage.getItemRegularPrice(index));
-    console.log(await favPage.getItemFinalPrice(index));
-    console.log(await favPage.getItemSize(index));
-    
-
+    expect.soft(apiResult.ok).toBeTruthy();
+    expect.soft(apiResult.status).toBe(200);
   });
+  test("Add item by api to MyList -> Validate The Brand Name", async () => {
+    expect(await favPage.getItemBrandName(index)).toBe(myListHandler.getNewestItemBrand(products.beauty_kit_women.id));
+  })
+
+  test("Add item by api to MyList -> Validate The Discount Percentage", async () => {
+    expect(await favPage.getItemDiscountPercentage(index)).toBe(myListHandler.getNewestItemDiscount(products.beauty_kit_women.id));
+  })
+
+  test("Add item by api to MyList -> Validate The Regular Price", async () => {
+    expect(await favPage.getItemRegularPrice(index)).toBe(myListHandler.getNewestItemPrice(products.beauty_kit_women.id).regular_price.value);
+  })
+
+  test("Add item by api to MyList -> Validate The Final Price", async () => {
+    expect(await favPage.getItemFinalPrice(index)).toBe(myListHandler.getNewestItemPrice(products.beauty_kit_women.id).final_price.value);
+  })
+
+
 });

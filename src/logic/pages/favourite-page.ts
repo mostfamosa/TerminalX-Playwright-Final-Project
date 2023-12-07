@@ -44,6 +44,7 @@ export class FavouritePage extends BasePage {
 
   }
   async findItemIndexByNameLink(nameLink: string) {
+    await this.page.waitForSelector(this.ITEMS_CARD)
     for (let i = 1; i <= await this.page.locator(this.ITEMS_CARD).count(); i++) {
       let currentName = await this.page.locator(`${this.ITEMS_NAME_LINK}[${i}]`).textContent();
       if (currentName === nameLink)
@@ -58,14 +59,20 @@ export class FavouritePage extends BasePage {
   }
 
 
+  //todo: add if not found//
   async getItemColor(index: number) {
     this.itemColor = this.page.locator(this.ITEM_COLOR(index));
-    return await this.itemColor.textContent();
+    let color = await this.itemColor.textContent();
+    if (color != null)
+      return color
+
   }
 
   async getItemSize(index: number) {
     this.itemSize = this.page.locator(this.ITEM_SIZE(index));
-    return await this.itemSize.textContent();
+    let size = await this.itemSize.textContent();
+    if (size != null)
+      return size
   }
 
   async getItemRegularPrice(index: number) {
@@ -83,10 +90,12 @@ export class FavouritePage extends BasePage {
   }
 
   async getItemDiscountPercentage(index: number) {
+
     this.discountItem = this.page.locator(this.DISCOUNT_ITEM(index));
     let price = await this.discountItem.textContent();
     if (price != null)
       return parseFloat(price);
+
   }
 
 }
