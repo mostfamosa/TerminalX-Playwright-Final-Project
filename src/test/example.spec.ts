@@ -15,12 +15,13 @@ test.describe('stam test', () => {
 
         //add item using UI
         const gotoitem = new ItemPage(page);
-        await page.goto('https://www.terminalx.com/justlanded');
+        await page.goto('https://www.terminalx.com/on-sale');
 
-        await gotoitem.clickrRandomItem(4);
-        let details = await gotoitem.getItemDetails();
-        console.log(details);
-        //await gotoitem.ClickAddToCart();
+        // await gotoitem.nameTag(4);
+        await gotoitem.itemImage(3);
+        // let details = await gotoitem.getItemDetails();
+        // console.log(details);
+        // await gotoitem.clickAddToCart();
 
 
 
