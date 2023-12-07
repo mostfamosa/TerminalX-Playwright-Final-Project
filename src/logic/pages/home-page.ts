@@ -1,6 +1,7 @@
 import { BasePage } from "./base-page";
 import { Page } from '@playwright/test';
 import { NavBar } from "../components/nav-bar";
+import { urls } from '../../config/pages-urls.json'
 
 export class HomePage extends BasePage {
 
@@ -32,5 +33,9 @@ export class HomePage extends BasePage {
   }
   async clickProfileFromNavbar() {
     await this.navBar.clickOnProfileName()
+  }
+
+  async navigateTo() {
+    await this.page.goto(urls.base_page);
   }
 }
