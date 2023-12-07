@@ -1,5 +1,6 @@
 import { BasePage } from "./base-page";
 import { Locator, Page } from '@playwright/test';
+import { urls } from '../../config/pages-urls.json'
 
 export class SearchPage extends BasePage {
 
@@ -20,7 +21,7 @@ export class SearchPage extends BasePage {
     }
 
     private async getRandomItem() {
-        let index = Math.floor(Math.random() * await this.itemCard.count());
+        let index = Math.floor(Math.random() * await this.itemCard.count() + 1);
         if (index == 9)//Ads always in this position
             index++;
         this.randomItem = this.page.locator(`${this.ITEM_IN_LIST}[${index}]`);
@@ -39,5 +40,9 @@ export class SearchPage extends BasePage {
 
     async getTitleText() {
         return await this.searchTitle.textContent();
+    }
+
+    async navigateTo() {
+        await this.page.goto(urls.search_page);
     }
 }

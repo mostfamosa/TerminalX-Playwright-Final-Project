@@ -1,5 +1,6 @@
 import { BasePage } from "./base-page";
 import { Page, ElementHandle, Locator } from '@playwright/test';
+import { urls } from '../../config/pages-urls.json'
 
 export class FavouritePage extends BasePage {
   private readonly ITEMS_LIST_LOCATOR = "div[class='listing_2tNy']";
@@ -95,7 +96,9 @@ export class FavouritePage extends BasePage {
     let price = await this.discountItem.textContent();
     if (price != null)
       return parseFloat(price);
-
   }
 
+  async navigateTo() {
+    await this.page.goto(urls.my_list_page);
+  }
 }
