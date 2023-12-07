@@ -2,95 +2,117 @@ import { BasePage } from "./base-page";
 import { Locator, Page } from '@playwright/test';
 
 export class ItemPage extends BasePage {
-    private readonly ITEM_IN_LIST = (index: number) => {
-        return `//*[@class="product-list_yyTm"]//li[${index}]`;
-    };
     private readonly SIZE_OPTIONS = "(//div[@class='size_1bXM'])//div[@data-test-id = 'qa-size-item']";
     private readonly COLOR_OPTIONS = ".color_FYIY .color-item_1Y2Y";
     private readonly TITLE = "h1[class='name_20R6']";
     private readonly ADD_TO_CART = "button[class='tx-link-a btn_nDwA tx-link_29YD btn_1UzJ btn-yellow_2tf3']";
     private readonly OVER_VIEW = "//div[@class='btn-quick_3Pv7 btn-quick-view_2SXw']";
+    private readonly IMAGE_URL = "div.image-container_3NPt img.image_3k9y"
+    private readonly COLOR_TITLE = "span[class='label-dynamic_3Y3S']"
+    private readonly PRECENTAGE_SALE = "//a[@class='tx-link-a stampa-sales_3ITt rtl_1_TU link_3vu6 tx-link_29YD']";
+    private readonly FINAL_PRICE = "div[class='row_2tcG bold_2wBM final-price_8CiX']";
+    private readonly ACTUALL_PRICE = "div[class='row_2tcG strikethrough_t2Ab regular-price_35Lt']";
+    private readonly ITEM_TAG = "span[class='black-bg_2mJm']";
+    private readonly BRAND ="div.right_1o65";
 
-
-    private itemInList: Locator;
+    private brandlocator:Locator
+    private itemtag: Locator;
+    private finalprice: Locator;
+    private precentagesale: Locator;
+    private actuallprice: Locator;
+    private colorName: Locator;
+    private imgUrl: Locator;
     private addToCart: Locator;
     private sizeList: Locator;
     private colorList: Locator;
     private itemName: Locator;
-    private itemDetails: { name?: string, color?: string, size?: string } = {};
+    private itemDetails: { name?: string, color?: string, size?: string, tag?: string, Itembrand?: string, finalprice?: string, actualprice?: string, sale?: string, colortiltle?: string, itemUrl: string, };
 
 
     constructor(page: Page) {
         super(page)
+        this.itemtag = this.page.locator(this.ITEM_TAG);
+        this.finalprice = this.page.locator(this.FINAL_PRICE);
+        this.precentagesale = this.page.locator(this.PRECENTAGE_SALE);
+        this.actuallprice = this.page.locator(this.ACTUALL_PRICE);
+        this.colorName = this.page.locator(this.COLOR_TITLE);
+        this.imgUrl = this.page.locator(this.IMAGE_URL);
+        this.brandlocator= this.page.locator(this.BRAND);
+
         this.addToCart = this.page.locator(this.ADD_TO_CART);
         this.sizeList = this.page.locator(this.SIZE_OPTIONS);
         this.colorList = this.page.locator(this.COLOR_OPTIONS);
         this.itemName = this.page.locator(this.TITLE);
         this.itemDetails = {};
-
-
     }
 
     async clickrRandomItem(index: number) {
         const overView = this.page.locator(this.OVER_VIEW).nth(index);
         await overView.click();
+
     }
 
+    async getRandomItemName(index: number) {
+        const namelocator = this.page.locator("[class='tx-link-a title_3ZxJ tx-link_29YD underline-hover_3GkV']").nth(index);
+
+        if (namelocator) {
+            const textContent = await namelocator.textContent();
+            return textContent;
+        }
+    }
     async getItemDetails() {
         await this.getItemName();
         await this.chooseColor();
         await this.chooseSize();
+        await this.colorTitle();
         return this.itemDetails;
     }
 
-    private async getItemName() {
+    async getItemName() {
         const name = await this.itemName.textContent();
         if (name) {
             this.itemDetails.name = name;
         }
     }
-    private async chooseColor() {
+
+
+    async chooseColor() {
         const colorTextContent = await this.selectRandomColor();
         if (colorTextContent) {
             this.itemDetails.color = colorTextContent;
         }
     }
-    private async chooseSize() {
+
+    async chooseSize() {
         const sizeTextContent = await this.selectRandomSize();
         if (sizeTextContent) {
             this.itemDetails.size = sizeTextContent;
         }
     }
-    async ClickAddToCart() {
+
+    async clickAddToCart() {
         const cart = this.addToCart;
         await cart.click();
-        console.log(this.itemDetails);
-    }
 
+    }
 
     private async selectRandomColor() {
         const colors = this.colorList;
         const colorsCount = await colors.count();
-        if (colorsCount > 1) {
-            const randomColorIndex = Math.floor(Math.random() * colorsCount);
-            const randomColor = colors.nth(randomColorIndex);
-            await randomColor.click();
-            const randomColorTitle = await randomColor.getAttribute('title');
-            if (randomColorTitle != null)
-                return randomColorTitle;
 
-            // if the item has on color option
-        } else if (colorsCount === 1) {
-            const onlyColor = colors.nth(0);
-            const onlyColorTextContent = await onlyColor.getAttribute('title');
-            if (onlyColorTextContent != null)
-                return onlyColorTextContent;
+        const randomColorIndex = Math.floor(Math.random() * colorsCount);
+        const randomColor = colors.nth(randomColorIndex);
+        let selectedColorClass = await randomColor.getAttribute('class');
+        if (selectedColorClass != null) {
+            if (!selectedColorClass.includes('selected'))
+                await randomColor.click();
         }
-        console.log("No Colors Found!"); //i added this for debugging
+        const randomColorTitle = await randomColor.getAttribute('title');
+        if (randomColorTitle != null)
+            return randomColorTitle;
     }
 
-
-    private async selectRandomSize(): Promise<string | null> {
+    private async selectRandomSize() {
         const sizeElements = this.sizeList;
         const randomSizeIndex = Math.floor(Math.random() * await sizeElements.count());
         const randomSize = sizeElements.nth(randomSizeIndex);
@@ -99,6 +121,84 @@ export class ItemPage extends BasePage {
         const randomSizeTextContent = await randomSize.textContent();
         return randomSizeTextContent;
     }
+    async nameTag(index: number) {
+        const tagg = this.itemtag.nth(index);
+        const tagTectContetnt = await tagg.textContent();
+        if (tagTectContetnt) {
+            this.itemDetails.tag = tagTectContetnt;
+            return tagTectContetnt;
 
+        }
+    }
+
+    async brandName(index: number) {
+        const itemInfo = this.brandlocator.nth(index);
+        const brand = itemInfo.locator("span");
+        const brandName = await brand.textContent();
+        if (brandName) {
+            this.itemDetails.Itembrand = brandName;
+            return brandName;
+        }
+        
+    }
+ 
+    async finalPrice(index: number) {
+        const finalprice = this.finalprice.nth(index);
+        const priceContetnt = await finalprice.textContent();
+        if (priceContetnt) {
+            this.itemDetails.finalprice = priceContetnt;
+            return priceContetnt;
+        }
+    }
+
+    async actuallPrice(index: number) {
+        const actuallprice = this.actuallprice.nth(index);
+        const priceContetnt = await actuallprice.textContent();
+        if (priceContetnt) {
+            this.itemDetails.actualprice = priceContetnt;
+            return priceContetnt;
+        }
+    }
+
+    async salePrecent(index: number) {
+        const saleprecentage = this.precentagesale.nth(index);
+        const saleContetnt = await saleprecentage.textContent();
+        if (saleContetnt) {
+            this.itemDetails.sale = saleContetnt;
+            return saleContetnt;
+        }
+    }
+
+    // async colorCount(index: number) {
+    //     await this.page.click('button[class="tx-link-a plus_2OZa tx-link_29YD withIcon_3Y7g"]');
+
+    //     const colorItemSelector = 'div[data-test-id="qa-color-item"]';
+    //     await this.page.waitForSelector(colorItemSelector);
+    //     const colorItems = await this.page.locator(colorItemSelector).nth(index);
+    //     const countt = await colorItems.count();
+
+    //     console.log( countt);
+
+    //     return colorItems;
+    // }
+
+
+    async colorTitle() {
+        //if the title match the random choosen color
+        const colorName = this.colorName;
+        const colorContet = await colorName.textContent();
+        if (colorContet) {
+            this.itemDetails.colortiltle = colorContet;
+            return colorContet;
+        }
+    }
+
+    async itemImage(index: number) {
+        const imageLocator = this.imgUrl.nth(index);
+        const imageSrc = await imageLocator.getAttribute('src');
+        if (imageSrc) {
+            this.itemDetails.itemUrl = imageSrc;
+            return imageSrc;
+        }
+    }
 }
-
