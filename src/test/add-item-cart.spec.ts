@@ -5,7 +5,7 @@ import { addItemToCart, currentUserInfo, deleteItemFromCartById } from '../logic
 import { products } from '../config/items-test.json';
 import { UserInfo } from '../logic/responseHandler/user-info-handler';
 
-test.describe.serial('New Product In Cart Validations Suite', () => {
+test.describe('New Product In Cart Validations Suite', () => {
     let browser: Browser;
     let cart: CartPage;
     let userinfo: UserInfo;
