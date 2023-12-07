@@ -1,5 +1,6 @@
 import { BasePage } from "./base-page";
 import { Locator, Page } from '@playwright/test';
+import { PopUp } from '../components/pop-up';
 
 export class ItemPage extends BasePage {
     private readonly SIZE_OPTIONS = "(//div[@class='size_1bXM'])//div[@data-test-id = 'qa-size-item']";
@@ -13,9 +14,9 @@ export class ItemPage extends BasePage {
     private readonly FINAL_PRICE = "div[class='row_2tcG bold_2wBM final-price_8CiX']";
     private readonly ACTUALL_PRICE = "div[class='row_2tcG strikethrough_t2Ab regular-price_35Lt']";
     private readonly ITEM_TAG = "span[class='black-bg_2mJm']";
-    private readonly BRAND ="div.right_1o65";
+    private readonly BRAND = "div.right_1o65";
 
-    private brandlocator:Locator
+    private brandlocator: Locator
     private itemtag: Locator;
     private finalprice: Locator;
     private precentagesale: Locator;
@@ -37,7 +38,7 @@ export class ItemPage extends BasePage {
         this.actuallprice = this.page.locator(this.ACTUALL_PRICE);
         this.colorName = this.page.locator(this.COLOR_TITLE);
         this.imgUrl = this.page.locator(this.IMAGE_URL);
-        this.brandlocator= this.page.locator(this.BRAND);
+        this.brandlocator = this.page.locator(this.BRAND);
 
         this.addToCart = this.page.locator(this.ADD_TO_CART);
         this.sizeList = this.page.locator(this.SIZE_OPTIONS);
@@ -64,6 +65,7 @@ export class ItemPage extends BasePage {
         await this.getItemName();
         await this.chooseColor();
         await this.chooseSize();
+        await this.clickAddToCart();
         await this.colorTitle();
         return this.itemDetails;
     }
@@ -139,9 +141,9 @@ export class ItemPage extends BasePage {
             this.itemDetails.Itembrand = brandName;
             return brandName;
         }
-        
+
     }
- 
+
     async finalPrice(index: number) {
         const finalprice = this.finalprice.nth(index);
         const priceContetnt = await finalprice.textContent();
@@ -170,16 +172,17 @@ export class ItemPage extends BasePage {
     }
 
     // async colorCount(index: number) {
-    //     await this.page.click('button[class="tx-link-a plus_2OZa tx-link_29YD withIcon_3Y7g"]');
+    //     const morecolors= this.page.locator('button[class="tx-link-a plus_2OZa tx-link_29YD withIcon_3Y7g"]');
+    //     if(await morecolors.isVisible()){
+    //         await morecolors.click();
+    //     }
 
-    //     const colorItemSelector = 'div[data-test-id="qa-color-item"]';
-    //     await this.page.waitForSelector(colorItemSelector);
-    //     const colorItems = await this.page.locator(colorItemSelector).nth(index);
-    //     const countt = await colorItems.count();
+    //     const colorItemSelector = this.page.locator('div[data-test-id="qa-color-item"]').nth(index);
+    //     const countt = await colorItemSelector.count();
 
     //     console.log( countt);
 
-    //     return colorItems;
+    //     return countt;
     // }
 
 

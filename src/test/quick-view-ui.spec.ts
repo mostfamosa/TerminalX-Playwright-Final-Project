@@ -1,6 +1,8 @@
 import { test, expect, Browser, chromium } from '@playwright/test';
 import { ItemPage } from "../logic/pages/item-page";
 import { urls } from '../config/pages-urls.json';
+import { it } from 'node:test';
+import { CartPage } from '../logic/pages/cart-page';
 
 test.describe('item details Validations Suite', () => {
     let browser: Browser;
@@ -74,13 +76,13 @@ test.describe('item details Validations Suite', () => {
         console.log(detailsUrl.itemUrl);
         expect(Url).toEqual(detailsUrl.itemUrl);
     });
-    
-    // test('extract the item brand name ->go to over view -> validate the same brand name appears ', async ({ page }) => {
-    //     const brand = await item.brandName(3);
-    //     const detailsBrand = await item.getItemDetails();
-    //     console.log(brand);
-    //     console.log(detailsBrand.Itembrand);
-    //     expect(brand).toEqual(detailsBrand.Itembrand);
-    // });
+///
+    test('extract the item brand name ->go to over view -> validate the same brand name appears ', async ({ page }) => {
+        const brand = await item.brandName(3);
+        const detailsBrand = await item.getItemDetails();
+        console.log(brand);
+        console.log(detailsBrand.Itembrand);
+        expect(brand).toEqual(detailsBrand.Itembrand);
+    });
 
 });
