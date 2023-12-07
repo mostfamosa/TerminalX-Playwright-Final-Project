@@ -3,11 +3,11 @@ import { BaseComponent } from "./base-components";
 
 export class PopUp extends BaseComponent {
   private readonly PAYMENT_PAGE_BUTTON_LOC =
-    '//[@id="top-portal-root"]/div/div/div/div[3]/a[1]';
+    'a[data-test-id="qa-minicart-checkout-button"]';
   private readonly CART_PAGE_BUTTON_LOC =
-    '//[@id="top-portal-root"]/div/div/div/div[3]/a[2]';
+    'a[data-test-id="qa-minicart-cart-button"]';
   private readonly CLOSE_POPUP_BUTTON_LOC =
-    '//[@id="top-portal-root"]/div/div/div/div[1]/button';
+    'button[class="tx-link-a icon_u36n remove_wqPe close_3POI rtl_i_e1 tx-link_29YD"]';
 
   private paymentPageBtn: Locator;
   private cartPageBtn: Locator;
