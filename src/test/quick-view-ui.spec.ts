@@ -14,7 +14,7 @@ test.describe('item details Validations Suite', () => {
     test.beforeEach(async () => {
         item = new ItemPage(await browserWrapper.getPage());
         await browserWrapper.navigate(item);
-        await item.clickrRandomItem(3);
+        await item.clickrRandomItem(5);
     });
 
     test.afterEach(async ({ page }) => {
@@ -27,7 +27,9 @@ test.describe('item details Validations Suite', () => {
 
     test('extract the item name before adding ot ->add random item ->  Validate the item name match', async () => {
         const details = await item.getItemDetails();
-        const itemName = await item.getRandomItemName(3);
+        const itemName = await item.getRandomItemName(5);
+        console.log(itemName);
+        console.log(details.name);
         expect(itemName).toEqual(details.name);
     });
     test('extract the item label from the list of the item ->validate the same lable appears when over veiwing the item ', async () => {

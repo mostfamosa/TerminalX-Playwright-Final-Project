@@ -1,11 +1,13 @@
 import { BasePage } from "./base-page";
 import { Locator, Page } from '@playwright/test';
 import { PopUp } from '../components/pop-up';
+import { urls } from '../../config/pages-urls.json'
+
 
 export class ItemPage extends BasePage {
     private readonly SIZE_OPTIONS = "(//div[@class='size_1bXM'])//div[@data-test-id = 'qa-size-item']";
     private readonly COLOR_OPTIONS = ".color_FYIY .color-item_1Y2Y";
-    private readonly TITLE = "h1[class='name_20R6']";
+    private readonly TITLE = 'h1[data-test-id="qa-pdp-name"]';
     private readonly ADD_TO_CART = "button[class='tx-link-a btn_nDwA tx-link_29YD btn_1UzJ btn-yellow_2tf3']";
     private readonly OVER_VIEW = "//div[@class='btn-quick_3Pv7 btn-quick-view_2SXw']";
     private readonly IMAGE_URL = "div.image-container_3NPt img.image_3k9y"
@@ -15,7 +17,9 @@ export class ItemPage extends BasePage {
     private readonly ACTUALL_PRICE = "div[class='row_2tcG strikethrough_t2Ab regular-price_35Lt']";
     private readonly ITEM_TAG = "span[class='black-bg_2mJm']";
     private readonly BRAND = "div.right_1o65";
+    private readonly RANDOM_NAME = ".right_1o65 span + a.tx-link-a.title_3ZxJ.tx-link_29YD.underline-hover_3GkV";
 
+    private randomTitle:Locator;
     private brandlocator: Locator
     private itemtag: Locator;
     private finalprice: Locator;
@@ -27,7 +31,7 @@ export class ItemPage extends BasePage {
     private sizeList: Locator;
     private colorList: Locator;
     private itemName: Locator;
-    private itemDetails: { name?: string, color?: string, size?: string, tag?: string, Itembrand?: string, finalprice?: string, actualprice?: string, sale?: string, colortiltle?: string, itemUrl: string, };
+    private itemDetails: { name: string, color: string, size: string, tag: string, Itembrand: string, finalprice: string, actualprice: string, sale: string, colortiltle: string, itemUrl: string, };
 
 
     constructor(page: Page) {
@@ -40,6 +44,7 @@ export class ItemPage extends BasePage {
         this.imgUrl = this.page.locator(this.IMAGE_URL);
         this.brandlocator = this.page.locator(this.BRAND);
 
+        this.randomTitle = this.page.locator(this.RANDOM_NAME);
         this.addToCart = this.page.locator(this.ADD_TO_CART);
         this.sizeList = this.page.locator(this.SIZE_OPTIONS);
         this.colorList = this.page.locator(this.COLOR_OPTIONS);
@@ -54,7 +59,7 @@ export class ItemPage extends BasePage {
     }
 
     async getRandomItemName(index: number) {
-        const namelocator = this.page.locator("[class='tx-link-a title_3ZxJ tx-link_29YD underline-hover_3GkV']").nth(index);
+        const namelocator = this.randomTitle.nth(index);
 
         if (namelocator) {
             const textContent = await namelocator.textContent();
@@ -204,4 +209,7 @@ export class ItemPage extends BasePage {
             return imageSrc;
         }
     }
+    async navigateTo() {
+        await this.page.goto(urls.just_landed_page);
+      }
 }
