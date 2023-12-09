@@ -17,6 +17,7 @@ test.describe('New Product In Cart Validations Suite', () => {
         await browserWrapper.launch();
     });
     test.beforeEach(async () => {
+        await browserWrapper.createNewPage();
         cart = new CartPage(await browserWrapper.getPage());
 
         await browserWrapper.navigate(cart);
@@ -32,11 +33,11 @@ test.describe('New Product In Cart Validations Suite', () => {
         itemNameLinkApi = userinfo.getNewestItemLabel();
         itemIndex = Number(await cart.findItemIndexByNameLink(itemNameLinkApi));
     });
-    test.afterEach(async ({ page }) => {
+    test.afterEach(async () => {
         let res = await currentUserInfo();
         let userinfo = new UserInfo(res);
         await deleteItemFromCartById(Number(userinfo.getNewestItemId()));
-        await page.close();
+        await browserWrapper.closePage();
     });
     test.afterAll(async () => {
         await browserWrapper.close();
