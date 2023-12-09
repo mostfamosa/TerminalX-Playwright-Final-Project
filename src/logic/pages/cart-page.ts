@@ -1,5 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./base-page";
+import { urls } from '../../config/pages-urls.json'
+
 
 export class CartPage extends BasePage {
 
@@ -98,5 +100,9 @@ export class CartPage extends BasePage {
       }
     });
     return selectedValue;
+  }
+
+  async navigateTo() {
+    await this.page.goto(urls.my_cart_page);
   }
 }

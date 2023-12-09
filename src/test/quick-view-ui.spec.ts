@@ -1,27 +1,33 @@
-import { test, expect, Browser, chromium } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { ItemPage } from "../logic/pages/item-page";
 import { urls } from '../config/pages-urls.json';
+import { BrowserWrapper } from '../infra/browser-wrapper';
 
 test.describe('item details Validations Suite', () => {
-    let browser: Browser;
+    let browserWrapper: BrowserWrapper;
     let item: ItemPage;
     let index: number
+
     test.beforeAll(async () => {
-        browser = await chromium.launch();
+        browserWrapper = new BrowserWrapper();
+        await browserWrapper.launch();
     });
 
-    test.beforeEach(async ({ page }) => {
-        await page.goto(urls.just_landed_page);
-        item = new ItemPage(page);
+    test.beforeEach(async () => {
+        await browserWrapper.createNewPage();
+        item = new ItemPage(await browserWrapper.getPage());
         index = 3
-        await item.clickrRandomItem(index);
+
+        await browserWrapper.navigate(item);
+        await item.clickrRandomItem(5);
     });
 
-    test.afterEach(async ({ page }) => {
-        await page.close();
+    test.afterEach(async () => {
+        await browserWrapper.closePage();
     });
+    
     test.afterAll(async () => {
-        await browser.close();
+        await browserWrapper.close();
     });
 
 
@@ -32,6 +38,13 @@ test.describe('item details Validations Suite', () => {
     });
     test('extract the item label from the list of the item ->validate the same lable appears when over veiwing the item ', async () => {
         const label = await item.nameTag(index);
+        const itemName = await item.getRandomItemName(5);
+        console.log(itemName);
+        console.log(details.name);
+        expect(itemName).toEqual(details.name);
+    });
+    test('extract the item label from the list of the item ->validate the same lable appears when over veiwing the item ', async () => {
+        const label = await item.nameTag(3);
         const detailsLabel = await item.getItemDetails();
         expect(label).toEqual(detailsLabel.tag);
     });

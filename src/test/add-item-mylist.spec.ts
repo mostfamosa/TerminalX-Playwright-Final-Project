@@ -1,14 +1,14 @@
-import { test, expect, Browser, chromium } from "@playwright/test";
-import { urls } from "../config/pages-urls.json";
+import { test, expect } from "@playwright/test";
 import { addItemToMyList } from "../logic/api/api-requests";
 import { products } from "../config/items-test.json";
 import { FavouritePage } from "../logic/pages/favourite-page";
 import { ResponseWrapper } from "../logic/api/response/response-wrapper";
 import { AddProductsToWishlistResponse } from "../logic/api/response/add-item-mylist-response";
 import { MyListHandler } from "../logic/responseHandler/mylist-add-item-handler";
+import { BrowserWrapper } from "../infra/browser-wrapper";
 
 test.describe.serial("Add product to MyList Validations Suite", () => {
-  let browser: Browser;
+  let browserWrapper: BrowserWrapper;
   let favPage: FavouritePage;
   let apiResult: ResponseWrapper<AddProductsToWishlistResponse>;
   let myListHandler: MyListHandler;
@@ -16,28 +16,28 @@ test.describe.serial("Add product to MyList Validations Suite", () => {
   let index: number;
 
   test.beforeAll(async () => {
-    browser = await chromium.launch();
+    browserWrapper = new BrowserWrapper();
+    await browserWrapper.launch();
   });
-  test.beforeEach(async ({ page }) => {
-    await page.goto(urls.my_list_page);
-    await page.setViewportSize({ width: 1920, height: 1080 });
+  test.beforeEach(async () => {
+    await browserWrapper.createNewPage();
+    favPage = new FavouritePage(await browserWrapper.getPage());
+    
+    await browserWrapper.navigate(favPage);
+    await browserWrapper.setToFullScreen();
 
     apiResult = await addItemToMyList(products.beauty_kit_women.id);
-    await page.reload();
+    await favPage.reload();
 
     myListHandler = new MyListHandler(apiResult);
-
-    favPage = new FavouritePage(page);
-
     name = myListHandler.getNewestItemLabel(products.beauty_kit_women.id);
     index = Number(await favPage.findItemIndexByNameLink(name));
-
   });
-  test.afterEach(async ({ page }) => {
-    await page.close();
+  test.afterEach(async () => {
+    await browserWrapper.closePage();
   });
   test.afterAll(async () => {
-    await browser.close();
+    await browserWrapper.close();
   });
 
   test("Add item by api to MyList -> Validate Response is truthy", async () => {

@@ -8,8 +8,8 @@ export class BasePage {
         this.page = page;
     }
 
-    async navigateTo(url: string) {
-        await this.page.goto(url);
+    async navigateTo() {
+        await this.page.goto(urls.base_page);
     }
 
     async getTitle() {
@@ -20,6 +20,10 @@ export class BasePage {
         return this.page.url();
     }
 
+    async reload() {
+        await this.page.reload();
+    }
+
     async waitForLoad() {
         await this.page.waitForLoadState('load');
     }
@@ -28,7 +32,11 @@ export class BasePage {
         await this.page.bringToFront();
     }
 
+    async goTo(url: string) {
+        await this.page.goto(url);
+    }
+
     async search(searchKey: string) {
-        await this.navigateTo(urls.search_page + searchKey);
+        await this.goTo(urls.search_page + searchKey);
     }
 }
