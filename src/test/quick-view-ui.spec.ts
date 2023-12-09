@@ -12,14 +12,17 @@ test.describe('item details Validations Suite', () => {
     });
 
     test.beforeEach(async () => {
+        await browserWrapper.createNewPage();
         item = new ItemPage(await browserWrapper.getPage());
+
         await browserWrapper.navigate(item);
         await item.clickrRandomItem(5);
     });
 
-    test.afterEach(async ({ page }) => {
-        await page.close();
+    test.afterEach(async () => {
+        await browserWrapper.closePage();
     });
+    
     test.afterAll(async () => {
         await browserWrapper.close();
     });
