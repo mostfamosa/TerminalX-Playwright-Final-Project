@@ -49,7 +49,7 @@ You can choose your own site to perform test on assuming it answers the followin
 * Tests may fail if there are actual bugs in the system
 
 ### Test Case
-* https://docs.google.com/spreadsheets/d/1NB0QqqlriIewIOU1cFRNnEFPFgwoFd6d6M6PmO2Zp0g/edit?usp=sharing
+* https://docs.google.com/spreadsheets/d/1GiG59K_YDpVYLPnL1TvnMXNRnGSDhxMyvkNJwm4uTck/edit?usp=drive_link
 
 ### Test Plan
-* https://docs.google.com/document/d/1uyNNlkm7h34l5G2eTf7eC0q8U1QkLkdnz-LI_JO7nGI/edit?usp=sharing
+* we will attach the file link soon!
