@@ -16,8 +16,8 @@ export class ItemPage extends BasePage {
     private readonly ACTUALL_PRICE = "div[class='row_2tcG strikethrough_t2Ab regular-price_35Lt']";
     private readonly ITEM_TAG = "span[class='black-bg_2mJm']";
     private readonly BRAND = "div.right_1o65";
-    private readonly NAME_LOC = "[class='tx-link-a title_3ZxJ tx-link_29YD underline-hover_3GkV']";
-    private readonly RANDOM_NAME = ".right_1o65 span + a.tx-link-a.title_3ZxJ.tx-link_29YD.underline-hover_3GkV";
+    // private readonly NAME_LOC = "[class='tx-link-a title_3ZxJ tx-link_29YD underline-hover_3GkV']";
+    private readonly RANDOM_NAME = "a[class='tx-link-a title_3ZxJ tx-link_29YD underline-hover_3GkV']";
 
     private nameLocator: Locator
     private randomTitle:Locator;
@@ -60,7 +60,7 @@ export class ItemPage extends BasePage {
     }
 
     async getRandomItemName(index: number) {
-        this.nameLocator = this.page.locator(this.NAME_LOC).nth(index);
+        this.nameLocator = this.randomTitle.nth(index);
         if (this.nameLocator) {
             const textContent = await this.nameLocator.textContent();
             return textContent;

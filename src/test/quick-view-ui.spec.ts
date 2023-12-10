@@ -18,7 +18,7 @@ test.describe('item details Validations Suite', () => {
         index = 3;
 
         await browserWrapper.navigate(item);
-        await item.clickrRandomItem(5);
+        await item.clickrRandomItem(index);
     });
 
     test.afterEach(async () => {
