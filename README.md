@@ -37,9 +37,6 @@ You can choose your own site to perform test on assuming it answers the followin
 * Selenium should not be revealed to the tests layer
 * Use POM
 
-### BDD
-* Make sure to use the correct language &wording in your cucumber steps
-
 ### GIT
 * Use pull requests and have code reviews
 * Use informative commit messages
@@ -52,4 +49,4 @@ You can choose your own site to perform test on assuming it answers the followin
 * https://docs.google.com/spreadsheets/d/1GiG59K_YDpVYLPnL1TvnMXNRnGSDhxMyvkNJwm4uTck/edit?usp=drive_link
 
 ### Test Plan
-* we will attach the file link soon!
+* https://docs.google.com/document/d/1E4MtDZDDUO0Dzd750IR26CKu3PSKHmE_/edit?usp=sharing&ouid=113126753414658703842&rtpof=true&sd=true
