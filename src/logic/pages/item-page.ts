@@ -1,6 +1,5 @@
 import { BasePage } from "./base-page";
 import { Locator, Page } from '@playwright/test';
-import { PopUp } from '../components/pop-up';
 import { urls } from '../../config/pages-urls.json'
 
 
@@ -17,8 +16,10 @@ export class ItemPage extends BasePage {
     private readonly ACTUALL_PRICE = "div[class='row_2tcG strikethrough_t2Ab regular-price_35Lt']";
     private readonly ITEM_TAG = "span[class='black-bg_2mJm']";
     private readonly BRAND = "div.right_1o65";
-    private readonly RANDOM_NAME = ".right_1o65 span + a.tx-link-a.title_3ZxJ.tx-link_29YD.underline-hover_3GkV";
+    // private readonly NAME_LOC = "[class='tx-link-a title_3ZxJ tx-link_29YD underline-hover_3GkV']";
+    private readonly RANDOM_NAME = "a[class='tx-link-a title_3ZxJ tx-link_29YD underline-hover_3GkV']";
 
+    private nameLocator: Locator
     private randomTitle:Locator;
     private brandlocator: Locator
     private itemtag: Locator;
@@ -31,8 +32,7 @@ export class ItemPage extends BasePage {
     private sizeList: Locator;
     private colorList: Locator;
     private itemName: Locator;
-    private itemDetails: { name: string, color: string, size: string, tag: string, Itembrand: string, finalprice: string, actualprice: string, sale: string, colortiltle: string, itemUrl: string, };
-
+    private itemDetails: { name?: string, color?: string, size?: string, tag?: string, Itembrand?: string, finalprice?: string, actualprice?: string, sale?: string, colortiltle?: string, itemUrl?: string };
 
     constructor(page: Page) {
         super(page)
@@ -51,6 +51,7 @@ export class ItemPage extends BasePage {
         this.itemName = this.page.locator(this.TITLE);
         this.itemDetails = {};
     }
+    private getRandomIndex = (count: number): number => { return Math.floor(Math.random() * count); }
 
     async clickrRandomItem(index: number) {
         const overView = this.page.locator(this.OVER_VIEW).nth(index);
@@ -59,10 +60,9 @@ export class ItemPage extends BasePage {
     }
 
     async getRandomItemName(index: number) {
-        const namelocator = this.randomTitle.nth(index);
-
-        if (namelocator) {
-            const textContent = await namelocator.textContent();
+        this.nameLocator = this.randomTitle.nth(index);
+        if (this.nameLocator) {
+            const textContent = await this.nameLocator.textContent();
             return textContent;
         }
     }
@@ -81,7 +81,6 @@ export class ItemPage extends BasePage {
             this.itemDetails.name = name;
         }
     }
-
 
     async chooseColor() {
         const colorTextContent = await this.selectRandomColor();
@@ -103,16 +102,17 @@ export class ItemPage extends BasePage {
 
     }
 
+
     private async selectRandomColor() {
         const colors = this.colorList;
         const colorsCount = await colors.count();
 
-        const randomColorIndex = Math.floor(Math.random() * colorsCount);
+        const randomColorIndex = this.getRandomIndex(colorsCount);
         const randomColor = colors.nth(randomColorIndex);
-        let selectedColorClass = await randomColor.getAttribute('class');
-        if (selectedColorClass != null) {
-            if (!selectedColorClass.includes('selected'))
-                await randomColor.click();
+
+        const selectedColorClass = await randomColor.getAttribute('class');
+        if (selectedColorClass && !selectedColorClass.includes('selected')) {
+            await randomColor.click();
         }
         const randomColorTitle = await randomColor.getAttribute('title');
         if (randomColorTitle != null)
@@ -121,15 +121,17 @@ export class ItemPage extends BasePage {
 
     private async selectRandomSize() {
         const sizeElements = this.sizeList;
-        const randomSizeIndex = Math.floor(Math.random() * await sizeElements.count());
+        const randomSizeIndex = this.getRandomIndex(await sizeElements.count());
         const randomSize = sizeElements.nth(randomSizeIndex);
         await randomSize.click();
 
         const randomSizeTextContent = await randomSize.textContent();
         return randomSizeTextContent;
     }
+
     async nameTag(index: number) {
         const tagg = this.itemtag.nth(index);
+        if(await tagg.isVisible()){
         const tagTectContetnt = await tagg.textContent();
         if (tagTectContetnt) {
             this.itemDetails.tag = tagTectContetnt;
@@ -137,6 +139,8 @@ export class ItemPage extends BasePage {
 
         }
     }
+    console.error("this is not a speacial item")
+}
 
     async brandName(index: number) {
         const itemInfo = this.brandlocator.nth(index);
@@ -160,35 +164,30 @@ export class ItemPage extends BasePage {
 
     async actuallPrice(index: number) {
         const actuallprice = this.actuallprice.nth(index);
+        if(await actuallprice.isVisible()){
         const priceContetnt = await actuallprice.textContent();
         if (priceContetnt) {
             this.itemDetails.actualprice = priceContetnt;
             return priceContetnt;
         }
     }
+    console.error("item is not on sale")
+}
 
     async salePrecent(index: number) {
         const saleprecentage = this.precentagesale.nth(index);
+        if(await saleprecentage.isVisible()){
+
         const saleContetnt = await saleprecentage.textContent();
         if (saleContetnt) {
             this.itemDetails.sale = saleContetnt;
             return saleContetnt;
         }
     }
-
-    // async colorCount(index: number) {
-    //     const morecolors= this.page.locator('button[class="tx-link-a plus_2OZa tx-link_29YD withIcon_3Y7g"]');
-    //     if(await morecolors.isVisible()){
-    //         await morecolors.click();
-    //     }
-
-    //     const colorItemSelector = this.page.locator('div[data-test-id="qa-color-item"]').nth(index);
-    //     const countt = await colorItemSelector.count();
-
-    //     console.log( countt);
-
-    //     return countt;
-    // }
+    else{
+        console.error("item is not on sale")
+    }
+}
 
 
     async colorTitle() {
