@@ -13,12 +13,12 @@ test.describe('Search For Products Validations Suite', () => {
         await browserWrapper.launch();
     });
     test.beforeEach(async () => {
+        await browserWrapper.createNewPage();
         searchPage = new SearchPage(await browserWrapper.getPage());
-        await browserWrapper.navigate(searchPage);
         await browserWrapper.setToFullScreen();
     });
-    test.afterEach(async ({ page }) => {
-        await page.close();
+    test.afterEach(async () => {
+        await browserWrapper.closePage();
     });
     test.afterAll(async () => {
         await browserWrapper.close();

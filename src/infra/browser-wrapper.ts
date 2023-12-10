@@ -9,8 +9,11 @@ export class BrowserWrapper {
     async launch() {
         this.browser = await chromium.launch();
         this.context = await this.browser.newContext();
-        this.page = await this.context.newPage();
     }
+
+    async createNewPage() {
+        this.page = await this.context!.newPage();
+      }
 
     async navigate(pageInstance: BasePage) {
         if (!this.page) {
@@ -37,6 +40,13 @@ export class BrowserWrapper {
         }
     }
 
+    async closeContext() {
+        if (this.context) {
+          await this.context.close();
+          this.context = null;
+        }
+      }
+
     async reloadPage() {
         if (!this.page) {
             throw new Error('Browser is not launched. Call launch() first.');
@@ -50,6 +60,10 @@ export class BrowserWrapper {
         }
         return this.page;
     }
+
+    async setPage(page: Page) {
+        this.page = page;
+      }
 
 
     async getContext() {

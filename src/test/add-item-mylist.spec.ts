@@ -20,7 +20,9 @@ test.describe.serial("Add product to MyList Validations Suite", () => {
     await browserWrapper.launch();
   });
   test.beforeEach(async () => {
+    await browserWrapper.createNewPage();
     favPage = new FavouritePage(await browserWrapper.getPage());
+    
     await browserWrapper.navigate(favPage);
     await browserWrapper.setToFullScreen();
 
@@ -31,8 +33,8 @@ test.describe.serial("Add product to MyList Validations Suite", () => {
     name = myListHandler.getNewestItemLabel(products.beauty_kit_women.id);
     index = Number(await favPage.findItemIndexByNameLink(name));
   });
-  test.afterEach(async ({ page }) => {
-    await page.close();
+  test.afterEach(async () => {
+    await browserWrapper.closePage();
   });
   test.afterAll(async () => {
     await browserWrapper.close();
