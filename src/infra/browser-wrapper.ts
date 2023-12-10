@@ -6,14 +6,22 @@ export class BrowserWrapper {
     private context: BrowserContext | null = null;
     private page: Page | null = null;
 
-    async launch() {
-        this.browser = await chromium.launch();
-        this.context = await this.browser.newContext();
-    }
+    async createNewPage<T extends BasePage>(pageClass: new (page: Page) => T) {
+        if (!this.browser) {
+            this.browser = await chromium.launch();
+        }
+        if (!this.context) {
+            this.context = await this.browser.newContext();
+        }
+        if (!this.page) {
+            this.page = await this.context.newPage();
+        }
 
-    async createNewPage() {
-        this.page = await this.context!.newPage();
-      }
+        const pageInstance = new pageClass(this.page);
+        await pageInstance.navigateTo();
+
+        return pageInstance;
+    }
 
     async navigate(pageInstance: BasePage) {
         if (!this.page) {
@@ -42,10 +50,10 @@ export class BrowserWrapper {
 
     async closeContext() {
         if (this.context) {
-          await this.context.close();
-          this.context = null;
+            await this.context.close();
+            this.context = null;
         }
-      }
+    }
 
     async reloadPage() {
         if (!this.page) {
@@ -63,7 +71,7 @@ export class BrowserWrapper {
 
     async setPage(page: Page) {
         this.page = page;
-      }
+    }
 
 
     async getContext() {

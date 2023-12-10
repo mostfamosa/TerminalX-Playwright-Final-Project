@@ -10,12 +10,9 @@ test.describe('Navigation Bar Validations Suite', () => {
 
     test.beforeAll(async () => {
         browserWrapper = new BrowserWrapper();
-        await browserWrapper.launch();
     })
     test.beforeEach(async () => {
-        await browserWrapper.createNewPage();
-        homePage = new HomePage(await browserWrapper.getPage());
-        await browserWrapper.navigate(homePage);
+        homePage = await browserWrapper.createNewPage(HomePage);
     });
     test.afterEach(async () => {
         await browserWrapper.closePage();
