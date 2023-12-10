@@ -1,33 +1,37 @@
-import { test, expect, Browser, chromium } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from "../logic/pages/home-page";
 import { urls } from '../config/pages-urls.json';
 import { NavBarOptions } from '../logic/enums/navigation-bar'
+import { BrowserWrapper } from '../infra/browser-wrapper';
 
 test.describe('Navigation Bar Validations Suite', () => {
-    let browser: Browser;
+    let browserWrapper: BrowserWrapper;
+    let homePage: HomePage;
 
     test.beforeAll(async () => {
-        browser = await chromium.launch();
+        browserWrapper = new BrowserWrapper();
+        await browserWrapper.launch();
+    })
+    test.beforeEach(async () => {
+        await browserWrapper.createNewPage();
+        homePage = new HomePage(await browserWrapper.getPage());
+        await browserWrapper.navigate(homePage);
     });
-    test.beforeEach(async ({ page }) => {
-        await page.goto(urls.base_page);
-    });
-    test.afterEach(async ({ page }) => {
-        await page.close();
+    test.afterEach(async () => {
+        await browserWrapper.closePage();
     });
     test.afterAll(async () => {
-        await browser.close();
+        await browserWrapper.close();
     });
 
     // Parameterize test validate navigation bar
     const navBar = [
-        { name: "JUST LANDED", url: urls.just_landed_page },
         { name: "ON SALE", url: urls.on_sale_page },
+        { name: "JUST LANDED", url: urls.just_landed_page },
         { name: "MY LIST", url: urls.my_list_page }
     ]
     for (const item of navBar) {
-        test(`Go to Home Page -> Click on :${item.name} -> Validate url is:${item.url}`, async ({ page }) => {
-            const homePage = new HomePage(page);
+        test(`Go to Home Page -> Click on :${item.name} -> Validate url is:${item.url}`, async () => {
             switch (item.name) {
                 case NavBarOptions.JUST_LANDED:
                     await homePage.clickJustLandedFromNavBar();
@@ -42,7 +46,7 @@ test.describe('Navigation Bar Validations Suite', () => {
                     console.error("Illegal Input!");
                     break;
             }
-            await expect(page).toHaveURL(item.url);
+            await expect(await browserWrapper.getPage()).toHaveURL(item.url);
         });
     }
 });
