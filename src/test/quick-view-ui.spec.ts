@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { ItemPage } from "../logic/pages/item-page";
+import { CartPage } from "../logic/pages/cart-page";
+
 import { BrowserWrapper } from '../infra/browser-wrapper';
 
 test.describe('item details Validations Suite', () => {
@@ -18,6 +20,8 @@ test.describe('item details Validations Suite', () => {
     });
 
     test.afterEach(async () => {
+        const myCart= await browserWrapper.createNewPage(CartPage);
+        await myCart.deleteItem();
         await browserWrapper.closePage();
     });
 

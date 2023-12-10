@@ -101,6 +101,10 @@ export class CartPage extends BasePage {
     });
     return selectedValue;
   }
+  async deleteItem(){
+    const deletLocat = this.page.locator("button[class='tx-link-a icon_u36n remove_wqPe tx-link_29YD']");
+    await deletLocat.click();
+  } 
 
   async navigateTo() {
     await this.page.goto(urls.my_cart_page);
