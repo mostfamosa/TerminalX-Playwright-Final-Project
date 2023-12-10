@@ -1,11 +1,15 @@
 {
   "dependencies": {
+    "allure-playwright": "^2.9.2",
     "playwright": "^1.40.0",
     "typescript": "^5.3.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
-    "@types/node": "^20.10.0"
+    "@types/node": "^20.10.0",
+    "allure-commandline": "^2.25.0"
   },
-  "scripts": {}
+  "scripts": {
+    "allure": "npx allure generate ./allure-results --clean && npx allure open ./allure-report"
+  }
 }

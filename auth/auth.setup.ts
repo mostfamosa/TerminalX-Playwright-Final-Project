@@ -1,7 +1,7 @@
 import { expect, test as setup } from '@playwright/test';
-import { NavBar } from "../../logic/components/nav-bar"
+import { NavBar } from "../src/logic/components/nav-bar"
 import { existsSync } from 'fs';
-import { auth } from '../../config/auth.json'
+import { auth } from '../src/config/auth.json'
 
 setup('authenticate', async ({ browser, request }) => {
     if (existsSync(auth.auth_file)) {
