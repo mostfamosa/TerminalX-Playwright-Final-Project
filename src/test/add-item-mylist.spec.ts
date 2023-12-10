@@ -1,6 +1,6 @@
 import { test, expect, Browser, chromium } from "@playwright/test";
 import { urls } from "../config/pages-urls.json";
-import { addItemToMyList } from "../logic/api/api-requests";
+import { addItemToMyList, deleteItemFromListById } from "../logic/api/api-requests";
 import { products } from "../config/items-test.json";
 import { FavouritePage } from "../logic/pages/favourite-page";
 import { ResponseWrapper } from "../logic/api/response/response-wrapper";
@@ -34,6 +34,7 @@ test.describe.serial("Add product to MyList Validations Suite", () => {
 
   });
   test.afterEach(async ({ page }) => {
+    await deleteItemFromListById(products.beauty_kit_women.id)
     await page.close();
   });
   test.afterAll(async () => {
