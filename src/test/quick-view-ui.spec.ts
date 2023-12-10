@@ -8,14 +8,11 @@ test.describe('item details Validations Suite', () => {
 
     test.beforeAll(async () => {
         browserWrapper = new BrowserWrapper();
-        await browserWrapper.launch();
     });
 
     test.beforeEach(async () => {
-        await browserWrapper.createNewPage();
-        item = new ItemPage(await browserWrapper.getPage());
+        item = await browserWrapper.createNewPage(ItemPage);
 
-        await browserWrapper.navigate(item);
         await item.clickrRandomItem(5);
     });
 

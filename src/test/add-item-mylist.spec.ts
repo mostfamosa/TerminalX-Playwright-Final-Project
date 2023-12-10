@@ -17,13 +17,9 @@ test.describe.serial("Add product to MyList Validations Suite", () => {
 
   test.beforeAll(async () => {
     browserWrapper = new BrowserWrapper();
-    await browserWrapper.launch();
   });
   test.beforeEach(async () => {
-    await browserWrapper.createNewPage();
-    favPage = new FavouritePage(await browserWrapper.getPage());
-    
-    await browserWrapper.navigate(favPage);
+    favPage = await browserWrapper.createNewPage(FavouritePage);
     await browserWrapper.setToFullScreen();
 
     apiResult = await addItemToMyList(products.beauty_kit_women.id);

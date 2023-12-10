@@ -10,11 +10,9 @@ test.describe('Search For Products Validations Suite', () => {
 
     test.beforeAll(async () => {
         browserWrapper = new BrowserWrapper();
-        await browserWrapper.launch();
     });
     test.beforeEach(async () => {
-        await browserWrapper.createNewPage();
-        searchPage = new SearchPage(await browserWrapper.getPage());
+        searchPage = await browserWrapper.createNewPage(SearchPage);
         await browserWrapper.setToFullScreen();
     });
     test.afterEach(async () => {
