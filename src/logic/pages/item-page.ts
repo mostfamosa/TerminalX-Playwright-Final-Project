@@ -1,5 +1,7 @@
 import { BasePage } from "./base-page";
 import { Locator, Page } from '@playwright/test';
+import { urls } from '../../config/pages-urls.json'
+
 
 export class ItemPage extends BasePage {
     private readonly SIZE_OPTIONS = "(//div[@class='size_1bXM'])//div[@data-test-id = 'qa-size-item']";
@@ -14,8 +16,8 @@ export class ItemPage extends BasePage {
     private readonly ACTUALL_PRICE = "div[class='row_2tcG strikethrough_t2Ab regular-price_35Lt']";
     private readonly ITEM_TAG = "span[class='black-bg_2mJm']";
     private readonly BRAND = "div.right_1o65";
-    private readonly NAME_LOC = "[class='tx-link-a title_3ZxJ tx-link_29YD underline-hover_3GkV']";
-    private readonly RANDOM_NAME = ".right_1o65 span + a.tx-link-a.title_3ZxJ.tx-link_29YD.underline-hover_3GkV";
+    // private readonly NAME_LOC = "[class='tx-link-a title_3ZxJ tx-link_29YD underline-hover_3GkV']";
+    private readonly RANDOM_NAME = "a[class='tx-link-a title_3ZxJ tx-link_29YD underline-hover_3GkV']";
 
     private nameLocator: Locator
     private randomTitle:Locator;
@@ -58,7 +60,7 @@ export class ItemPage extends BasePage {
     }
 
     async getRandomItemName(index: number) {
-        this.nameLocator = this.page.locator(this.NAME_LOC).nth(index);
+        this.nameLocator = this.randomTitle.nth(index);
         if (this.nameLocator) {
             const textContent = await this.nameLocator.textContent();
             return textContent;
@@ -129,6 +131,7 @@ export class ItemPage extends BasePage {
 
     async nameTag(index: number) {
         const tagg = this.itemtag.nth(index);
+        if(await tagg.isVisible()){
         const tagTectContetnt = await tagg.textContent();
         if (tagTectContetnt) {
             this.itemDetails.tag = tagTectContetnt;
@@ -136,6 +139,8 @@ export class ItemPage extends BasePage {
 
         }
     }
+    console.error("this is not a speacial item")
+}
 
     async brandName(index: number) {
         const itemInfo = this.brandlocator.nth(index);
@@ -159,21 +164,30 @@ export class ItemPage extends BasePage {
 
     async actuallPrice(index: number) {
         const actuallprice = this.actuallprice.nth(index);
+        if(await actuallprice.isVisible()){
         const priceContetnt = await actuallprice.textContent();
         if (priceContetnt) {
             this.itemDetails.actualprice = priceContetnt;
             return priceContetnt;
         }
     }
+    console.error("item is not on sale")
+}
 
     async salePrecent(index: number) {
         const saleprecentage = this.precentagesale.nth(index);
+        if(await saleprecentage.isVisible()){
+
         const saleContetnt = await saleprecentage.textContent();
         if (saleContetnt) {
             this.itemDetails.sale = saleContetnt;
             return saleContetnt;
         }
     }
+    else{
+        console.error("item is not on sale")
+    }
+}
 
 
     async colorTitle() {

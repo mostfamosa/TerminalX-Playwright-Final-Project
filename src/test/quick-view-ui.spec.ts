@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { ItemPage } from "../logic/pages/item-page";
-import { urls } from '../config/pages-urls.json';
 import { BrowserWrapper } from '../infra/browser-wrapper';
 
 test.describe('item details Validations Suite', () => {
@@ -16,10 +15,10 @@ test.describe('item details Validations Suite', () => {
     test.beforeEach(async () => {
         await browserWrapper.createNewPage();
         item = new ItemPage(await browserWrapper.getPage());
-        index = 3
+        index = 3;
 
         await browserWrapper.navigate(item);
-        await item.clickrRandomItem(5);
+        await item.clickrRandomItem(index);
     });
 
     test.afterEach(async () => {
@@ -36,15 +35,9 @@ test.describe('item details Validations Suite', () => {
         const itemName = await item.getRandomItemName(index);
         expect(itemName).toEqual(details.name);
     });
-    test('extract the item label from the list of the item ->validate the same lable appears when over veiwing the item ', async () => {
+
+    test('extract the item label from the list of the item ->validate the same tag appears when over veiwing the item ', async () => {
         const label = await item.nameTag(index);
-        const itemName = await item.getRandomItemName(5);
-        console.log(itemName);
-        console.log(details.name);
-        expect(itemName).toEqual(details.name);
-    });
-    test('extract the item label from the list of the item ->validate the same lable appears when over veiwing the item ', async () => {
-        const label = await item.nameTag(3);
         const detailsLabel = await item.getItemDetails();
         expect(label).toEqual(detailsLabel.tag);
     });
