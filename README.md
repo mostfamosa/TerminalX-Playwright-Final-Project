@@ -1,4 +1,4 @@
-# Selenium-Cucumber-Final-Project
+# Playwright-Final-Project
 ## Intro
 We have talked a lot about Playwright now it’s time to put it all together!
 In this project we will write a test plan, develop automation infrastructure, and implement all kinds of test.
