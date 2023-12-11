@@ -21,7 +21,7 @@ test.describe('item details Validations Suite', () => {
 
     test.afterEach(async () => {
         const myCart= await browserWrapper.createNewPage(CartPage);
-        await myCart.deleteItem();
+       // await myCart.deleteItem();
         await browserWrapper.closePage();
     });
 

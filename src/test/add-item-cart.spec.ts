@@ -13,6 +13,7 @@ test.describe('New Product In Cart Validations Suite', () => {
     let userinfo: UserInfo;
     let itemNameLinkApi: string;
     let itemIndex: number;
+    let itemId: number;
     let res: ResponseWrapper<CurrentUserInfoResponse>;
 
     test.beforeAll(async () => {
@@ -29,14 +30,19 @@ test.describe('New Product In Cart Validations Suite', () => {
         res = await currentUserInfo();
         userinfo = new UserInfo(res);
 
+        console.log(res.data.data.currentUserInfo.cart_object.items[0].product.id);
+        console.log(res.data.data.currentUserInfo.cart_object.items[0].product.sku);
+        console.log(res.data.data.currentUserInfo.cart_object.items[0].product.thumbnail.label);
+
+
+        // To Delete The Item Later
+        itemId = userinfo.getItemIdBySku(products.baby_overalls_animals_boys.sku); 
         // To Find the index of the item in cart
-        itemNameLinkApi = userinfo.getNewestItemLabel();
+        itemNameLinkApi = products.baby_overalls_animals_boys.name;
         itemIndex = Number(await cart.findItemIndexByNameLink(itemNameLinkApi));
     });
     test.afterEach(async () => {
-        res = await currentUserInfo();
-        let userinfo = new UserInfo(res);
-        await deleteItemFromCartById(Number(userinfo.getNewestItemId()));
+        await deleteItemFromCartById(itemId);
         await browserWrapper.closePage();
     });
     test.afterAll(async () => {
@@ -47,13 +53,12 @@ test.describe('New Product In Cart Validations Suite', () => {
         expect.soft(res.ok).toBeTruthy();
         expect.soft(res.status).toBe(200);
         expect.soft(await cart.getItemBrandLink(itemIndex)).toBe(itemNameLinkApi);
-        expect.soft(await cart.getItemBrandLink(itemIndex)).toBe(itemNameLinkApi);
-        expect.soft(await cart.getItemColor(itemIndex)).toBe(userinfo.getNewestItemColor());
-        expect.soft(await cart.getItemSize(itemIndex)).toBe(userinfo.getNewestItemSize());
-        expect.soft(await cart.getItemBrandName(itemIndex)).toBe(userinfo.getNewestItemBrand());
-        expect.soft(await cart.getItemRegularPrice(itemIndex)).toBe(userinfo.getNewestItemPrice().regular_price.value);
-        expect.soft(await cart.getItemDiscountPercentage(itemIndex)).toBe(userinfo.getNewestItemPrice().discount.percent_off);
-        expect.soft(await cart.getItemFinalPrice(itemIndex)).toBe(userinfo.getNewestItemPrice().final_price.value);
-        expect.soft(await cart.getItemTotalPrice(itemIndex)).toBe(userinfo.getNewestItemPrice().final_price.value * userinfo.getLastItemAddedToCart().quantity);
+        expect.soft(await cart.getItemColor(itemIndex)).toBe(userinfo.getItemColorBySku(products.baby_overalls_animals_boys.sku));
+        expect.soft(await cart.getItemSize(itemIndex)).toBe(userinfo.getItemSizeBySku(products.baby_overalls_animals_boys.sku));
+        expect.soft(await cart.getItemBrandName(itemIndex)).toBe(userinfo.getItemBrandBySku(products.baby_overalls_animals_boys.sku));
+        expect.soft(await cart.getItemRegularPrice(itemIndex)).toBe(userinfo.getItemPriceBySku(products.baby_overalls_animals_boys.sku).regular_price.value);
+        expect.soft(await cart.getItemDiscountPercentage(itemIndex)).toBe(userinfo.getItemPriceBySku(products.baby_overalls_animals_boys.sku).discount.percent_off);
+        expect.soft(await cart.getItemFinalPrice(itemIndex)).toBe(userinfo.getItemPriceBySku(products.baby_overalls_animals_boys.sku).final_price.value);
+        expect.soft(await cart.getItemTotalPrice(itemIndex)).toBe(userinfo.getItemPriceBySku(products.baby_overalls_animals_boys.sku).final_price.value * userinfo.getLastItemAddedToCart().quantity);
     });
 });
