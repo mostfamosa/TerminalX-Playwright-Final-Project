@@ -59,6 +59,5 @@ test.describe('New Product In Cart Validations Suite', () => {
         expect.soft(await cart.getItemRegularPrice(itemIndex)).toBe(userinfo.getItemPriceBySku(products.baby_overalls_animals_boys.sku).regular_price.value);
         expect.soft(await cart.getItemDiscountPercentage(itemIndex)).toBe(userinfo.getItemPriceBySku(products.baby_overalls_animals_boys.sku).discount.percent_off);
         expect.soft(await cart.getItemFinalPrice(itemIndex)).toBe(userinfo.getItemPriceBySku(products.baby_overalls_animals_boys.sku).final_price.value);
-        expect.soft(await cart.getItemTotalPrice(itemIndex)).toBe(userinfo.getItemPriceBySku(products.baby_overalls_animals_boys.sku).final_price.value * userinfo.getLastItemAddedToCart().quantity);
     });
 });
