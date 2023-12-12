@@ -17,6 +17,7 @@ export class CartPage extends BasePage {
   private readonly FINAL_PRICE_ITEM = (index: number) => `(//div[@class='row_2tcG bold_2wBM price-final_13zw'])[${index}]`;
   private readonly DISCOUNT_ITEM = (index: number) => `(//a[@class='tx-link-a stampa-sales_3gHT link_3vu6 tx-link_29YD'])[${index}]`;
   private readonly QUANTITY_ITEM = (index: number) => `(//div[@class='select-container_tSy-'])[${index}]`;
+  private readonly DELETE_ITEM_BY_INDEX = (index: number) => `(//button[@class='tx-link-a icon_u36n remove_wqPe tx-link_29YD'])[${index}]`;
 
 
   private itemBrand: Locator;
@@ -35,6 +36,7 @@ export class CartPage extends BasePage {
   }
 
   async findItemIndexByNameLink(nameLink: string) {
+    await this.page.waitForSelector(this.ITEMS_CARD);
     for (let i = 1; i <= await this.page.locator(this.ITEMS_CARD).count(); i++) {
       let currentName = await this.page.locator(`${this.ITEMS_NAME_LINK}[${i}]`).textContent();
       if (currentName === nameLink)
@@ -101,11 +103,11 @@ export class CartPage extends BasePage {
     });
     return selectedValue;
   }
-  async deleteItem(){
-    const deletLocat = this.page.locator("button[class='tx-link-a icon_u36n remove_wqPe tx-link_29YD']");
+  async deleteItem(index: number) {
+    const deletLocat = this.page.locator(this.DELETE_ITEM_BY_INDEX(index));
     await deletLocat.click();
-  } 
-
+    
+  }
   async navigateTo() {
     await this.page.goto(urls.my_cart_page);
   }

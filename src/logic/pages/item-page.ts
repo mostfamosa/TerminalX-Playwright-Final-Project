@@ -6,7 +6,7 @@ import { urls } from '../../config/pages-urls.json'
 export class ItemPage extends BasePage {
     private readonly SIZE_OPTIONS = "(//div[@class='size_1bXM'])//div[@data-test-id = 'qa-size-item']";
     private readonly COLOR_OPTIONS = ".color_FYIY .color-item_1Y2Y";
-    private readonly TITLE = 'h1[data-test-id="qa-pdp-name"]';
+    private readonly TITLE = '//h1[@class="name_20R6"]';
     private readonly ADD_TO_CART = "button[class='tx-link-a btn_nDwA tx-link_29YD btn_1UzJ btn-yellow_2tf3']";
     private readonly OVER_VIEW = "//div[@class='btn-quick_3Pv7 btn-quick-view_2SXw']";
     private readonly IMAGE_URL = "div.image-container_3NPt img.image_3k9y"
@@ -16,11 +16,10 @@ export class ItemPage extends BasePage {
     private readonly ACTUALL_PRICE = "div[class='row_2tcG strikethrough_t2Ab regular-price_35Lt']";
     private readonly ITEM_TAG = "span[class='black-bg_2mJm']";
     private readonly BRAND = "div.right_1o65";
-    // private readonly NAME_LOC = "[class='tx-link-a title_3ZxJ tx-link_29YD underline-hover_3GkV']";
-    private readonly RANDOM_NAME = "a[class='tx-link-a title_3ZxJ tx-link_29YD underline-hover_3GkV']";
+    private readonly RANDOM_NAME = "//div[@class='right_1o65']//a";
 
     private nameLocator: Locator
-    private randomTitle:Locator;
+    private randomTitle: Locator;
     private brandlocator: Locator
     private itemtag: Locator;
     private finalprice: Locator;
@@ -59,7 +58,7 @@ export class ItemPage extends BasePage {
 
     }
 
-    async getRandomItemName(index: number) {
+    async getItemNameByIndex(index: number) {
         this.nameLocator = this.randomTitle.nth(index);
         if (this.nameLocator) {
             const textContent = await this.nameLocator.textContent();
@@ -79,6 +78,7 @@ export class ItemPage extends BasePage {
         const name = await this.itemName.textContent();
         if (name) {
             this.itemDetails.name = name;
+            return name;
         }
     }
 
@@ -131,16 +131,16 @@ export class ItemPage extends BasePage {
 
     async nameTag(index: number) {
         const tagg = this.itemtag.nth(index);
-        if(await tagg.isVisible()){
-        const tagTectContetnt = await tagg.textContent();
-        if (tagTectContetnt) {
-            this.itemDetails.tag = tagTectContetnt;
-            return tagTectContetnt;
+        if (await tagg.isVisible()) {
+            const tagTectContetnt = await tagg.textContent();
+            if (tagTectContetnt) {
+                this.itemDetails.tag = tagTectContetnt;
+                return tagTectContetnt;
 
+            }
         }
+        console.error("this is not a speacial item")
     }
-    console.error("this is not a speacial item")
-}
 
     async brandName(index: number) {
         const itemInfo = this.brandlocator.nth(index);
@@ -164,30 +164,30 @@ export class ItemPage extends BasePage {
 
     async actuallPrice(index: number) {
         const actuallprice = this.actuallprice.nth(index);
-        if(await actuallprice.isVisible()){
-        const priceContetnt = await actuallprice.textContent();
-        if (priceContetnt) {
-            this.itemDetails.actualprice = priceContetnt;
-            return priceContetnt;
+        if (await actuallprice.isVisible()) {
+            const priceContetnt = await actuallprice.textContent();
+            if (priceContetnt) {
+                this.itemDetails.actualprice = priceContetnt;
+                return priceContetnt;
+            }
         }
+        console.error("item is not on sale")
     }
-    console.error("item is not on sale")
-}
 
     async salePrecent(index: number) {
         const saleprecentage = this.precentagesale.nth(index);
-        if(await saleprecentage.isVisible()){
+        if (await saleprecentage.isVisible()) {
 
-        const saleContetnt = await saleprecentage.textContent();
-        if (saleContetnt) {
-            this.itemDetails.sale = saleContetnt;
-            return saleContetnt;
+            const saleContetnt = await saleprecentage.textContent();
+            if (saleContetnt) {
+                this.itemDetails.sale = saleContetnt;
+                return saleContetnt;
+            }
+        }
+        else {
+            console.error("item is not on sale")
         }
     }
-    else{
-        console.error("item is not on sale")
-    }
-}
 
 
     async colorTitle() {
@@ -210,5 +210,5 @@ export class ItemPage extends BasePage {
     }
     async navigateTo() {
         await this.page.goto(urls.just_landed_page);
-      }
+    }
 }
