@@ -5,9 +5,11 @@ import { CartPage } from "../logic/pages/cart-page";
 import { BrowserWrapper } from '../infra/browser-wrapper';
 
 test.describe('item details Validations Suite', () => {
+
     let browserWrapper: BrowserWrapper;
     let item: ItemPage;
-    let index: number
+    let index: number;
+    let itemName;
 
     test.beforeAll(async () => {
         browserWrapper = new BrowserWrapper();
@@ -17,11 +19,17 @@ test.describe('item details Validations Suite', () => {
         item = await browserWrapper.createNewPage(ItemPage);
         index = 3;
         await item.clickrRandomItem(index);
+        itemName = await item.getItemNameByIndex(index);
     });
 
     test.afterEach(async () => {
-        const myCart= await browserWrapper.createNewPage(CartPage);
-       // await myCart.deleteItem();
+        const myCart = await browserWrapper.createNewPage(CartPage);
+        let deletedIndex: any;
+        if (itemName !== undefined)
+            deletedIndex = await myCart.findItemIndexByNameLink(itemName);
+        else
+            console.error("Can't Find the Index of item");
+        await myCart.deleteItem(deletedIndex);
         await browserWrapper.closePage();
     });
 
@@ -32,8 +40,8 @@ test.describe('item details Validations Suite', () => {
 
     test('extract the item name before adding ot ->add random item ->  Validate the item name match', async () => {
         const details = await item.getItemDetails();
-        const itemName = await item.getRandomItemName(index);
         expect(itemName).toEqual(details.name);
+
     });
 
     test('extract the item label from the list of the item ->validate the same tag appears when over veiwing the item ', async () => {
