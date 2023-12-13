@@ -69,7 +69,6 @@ export class ItemPage extends BasePage {
         await this.getItemName();
         await this.chooseColor();
         await this.chooseSize();
-        await this.clickAddToCart();
         await this.colorTitle();
         return this.itemDetails;
     }
@@ -95,14 +94,6 @@ export class ItemPage extends BasePage {
             this.itemDetails.size = sizeTextContent;
         }
     }
-
-    async clickAddToCart() {
-        const cart = this.addToCart;
-        await cart.click();
-
-    }
-
-
     private async selectRandomColor() {
         const colors = this.colorList;
         const colorsCount = await colors.count();
