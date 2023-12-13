@@ -23,13 +23,6 @@ test.describe('item details Validations Suite', () => {
     });
 
     test.afterEach(async () => {
-        const myCart = await browserWrapper.createNewPage(CartPage);
-        let deletedIndex: any;
-        if (itemName !== undefined)
-            deletedIndex = await myCart.findItemIndexByNameLink(itemName);
-        else
-            console.error("Can't Find the Index of item");
-        await myCart.deleteItem(deletedIndex);
         await browserWrapper.closePage();
     });
 
