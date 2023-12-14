@@ -30,11 +30,6 @@ test.describe('New Product In Cart Validations Suite', () => {
         res = await currentUserInfo();
         userinfo = new UserInfo(res);
 
-        console.log(res.data.data.currentUserInfo.cart_object.items[0].product.id);
-        console.log(res.data.data.currentUserInfo.cart_object.items[0].product.sku);
-        console.log(res.data.data.currentUserInfo.cart_object.items[0].product.thumbnail.label);
-
-
         // To Delete The Item Later
         itemId = userinfo.getItemIdBySku(products.baby_overalls_animals_boys.sku); 
         // To Find the index of the item in cart

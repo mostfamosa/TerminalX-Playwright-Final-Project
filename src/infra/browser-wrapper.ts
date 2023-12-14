@@ -23,16 +23,11 @@ export class BrowserWrapper {
         return pageInstance;
     }
 
-    async navigate(pageInstance: BasePage) {
+    async goTo(url: string) {
         if (!this.page) {
-            throw new Error('Browser is not launched. Call launch() first.');
+            throw new Error('Browser is not launched. Call createNewPage() first.');
         }
-
-        if (!(pageInstance instanceof BasePage)) {
-            throw new Error('The provided page instance must be an instance of BasePage.');
-        }
-
-        await pageInstance.navigateTo();
+        await this.page.goto(url);
     }
 
     async close() {
