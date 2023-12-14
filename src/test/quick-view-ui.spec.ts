@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { ItemPage } from "../logic/pages/item-page";
-import { CartPage } from "../logic/pages/cart-page";
+import { ItemPage } from "../logic/pages/item-page"
 
 import { BrowserWrapper } from '../infra/browser-wrapper';
 
@@ -9,7 +8,6 @@ test.describe('item details Validations Suite', () => {
     let browserWrapper: BrowserWrapper;
     let item: ItemPage;
     let index: number;
-    let itemName;
 
     test.beforeAll(async () => {
         browserWrapper = new BrowserWrapper();
@@ -18,8 +16,6 @@ test.describe('item details Validations Suite', () => {
     test.beforeEach(async () => {
         item = await browserWrapper.createNewPage(ItemPage);
         index = 3;
-        await item.clickrRandomItem(index);
-        itemName = await item.getItemNameByIndex(index);
     });
 
     test.afterEach(async () => {
@@ -32,49 +28,51 @@ test.describe('item details Validations Suite', () => {
 
 
     test('extract the item name before adding ot ->add random item ->  Validate the item name match', async () => {
-        const details = await item.getItemDetails();
-        expect(itemName).toEqual(details.name);
+        const itemName = await item.getItemNameByIndex(index);
+        await item.clickrRandomItem(index);
+        const nameQuickView = await item.getItemNameQuickView();
+        expect(itemName).toEqual(nameQuickView);
 
     });
 
     test('extract the item label from the list of the item ->validate the same tag appears when over veiwing the item ', async () => {
-        const label = await item.nameTag(index);
-        const detailsLabel = await item.getItemDetails();
-        expect(label).toEqual(detailsLabel.tag);
+        const label = await item.getItemNameTagByIndex(index);
+        await item.clickrRandomItem(index);
+        const labelQuickView = await item.nameTagInsideQuickView();
+        expect(label).toEqual(labelQuickView);
     });
 
     test('extract the item final price from the list of the item ->validate the same price appears when over veiwing the item ', async () => {
-        const price = await item.finalPrice(index);
-        const detailsPrice = await item.getItemDetails();
-        expect(price).toEqual(detailsPrice.finalprice);
+        const price = await item.finalPriceByIndex(index);
+        await item.clickrRandomItem(index);
+        const finalPriceQuickView = await item.finalPriceQuickView();
+        expect(price).toEqual(finalPriceQuickView);
     });
     test('extract the item actual price from the list of the item ->validate the same price appears when over veiwing the item ', async () => {
-        const price = await item.actuallPrice(index);
-        const detailsPrice = await item.getItemDetails();
-        expect(price).toEqual(detailsPrice.actualprice);
+        const price = await item.actuallPriceByIndex(index);
+        await item.clickrRandomItem(index);
+        const actuallPriceQuickView = await item.actuallPriceQuickView();
+        expect(price).toEqual(actuallPriceQuickView);
     });
     test('extract the item sale precentage from the list of the item ->validate the same precent appears when over veiwing the item ', async () => {
-        const sale = await item.salePrecent(index);
-        const detailsSale = await item.getItemDetails();
-        expect(sale).toEqual(detailsSale.sale);
+        const sale = await item.salePrecentByIndex(index);
+        await item.clickrRandomItem(index);
+        const saleInQuickView = await item.salePrecentQuickView();
+        expect(sale).toEqual(saleInQuickView);
     });
 
     test('choose a random color -> check if the color name matching the choosen one ', async () => {
-        const detailsColor = await item.getItemDetails();
-        const Colortitle = await item.colorTitle();
-        expect(detailsColor.color).toContain(Colortitle);
-    });
-
-    test('extract the item img url  ->go to over view -> validate the same url picture appears ', async () => {
-        const Url = await item.itemImage(index);
-        const detailsUrl = await item.getItemDetails();
-        expect(Url).toEqual(detailsUrl.itemUrl);
+        await item.clickrRandomItem(index);
+        const detailsColor = await item.chooseColor();
+        const Colortitle = await item.colorTitleQuickView();
+        expect(detailsColor).toContain(Colortitle);
     });
 
     test('extract the item brand name ->go to over view -> validate the same brand name appears ', async () => {
-        const brand = await item.brandName(index);
-        const detailsBrand = await item.getItemDetails();
-        expect(brand).toEqual(detailsBrand.Itembrand);
+        const brand = await item.brandNameByIndex(index);
+        await item.clickrRandomItem(index);
+        const brandQuickView = await item.brandNameFromQuickView();
+        expect(brand).toEqual(brandQuickView);
     });
 
 });
