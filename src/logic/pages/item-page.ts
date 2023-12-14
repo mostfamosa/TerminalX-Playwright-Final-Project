@@ -6,17 +6,20 @@ import { urls } from '../../config/pages-urls.json'
 export class ItemPage extends BasePage {
     private readonly SIZE_OPTIONS = "(//div[@class='size_1bXM'])//div[@data-test-id = 'qa-size-item']";
     private readonly COLOR_OPTIONS = ".color_FYIY .color-item_1Y2Y";
-    private readonly TITLE = '//h1[@class="name_20R6"]';
-    private readonly ADD_TO_CART = "button[class='tx-link-a btn_nDwA tx-link_29YD btn_1UzJ btn-yellow_2tf3']";
+    private readonly TITLE_QUICK_VIEW = '//h1[@class="name_20R6"]';
     private readonly OVER_VIEW = "//div[@class='btn-quick_3Pv7 btn-quick-view_2SXw']";
-    private readonly IMAGE_URL = "div.image-container_3NPt img.image_3k9y"
     private readonly COLOR_TITLE = "span[class='label-dynamic_3Y3S']"
     private readonly PRECENTAGE_SALE = "//a[@class='tx-link-a stampa-sales_3ITt rtl_1_TU link_3vu6 tx-link_29YD']";
     private readonly FINAL_PRICE = "div[class='row_2tcG bold_2wBM final-price_8CiX']";
     private readonly ACTUALL_PRICE = "div[class='row_2tcG strikethrough_t2Ab regular-price_35Lt']";
+    private readonly ACTUALL_PRICE_QUICK_VIEW = '//div[@class="row_2tcG strikethrough_t2Ab prices-regular_yum0"]';
     private readonly ITEM_TAG = "span[class='black-bg_2mJm']";
     private readonly BRAND = "div.right_1o65";
     private readonly RANDOM_NAME = "//div[@class='right_1o65']//a";
+    private readonly TAG_NAME_QUICK_VIEW = '//*[@id="panel-root"]/div/div[2]/div/div[2]/div/div[2]/div/div[1]/div[2]/div/span';
+    private readonly BRAND_NAME_QUICK_VIEW = "a[class='tx-link-a brand_2ltz tx-link_29YD underline-hover_3GkV']";
+    private readonly FINAL_PRICE_QUICK_VIEW = 'div[data-test-id="qa-pdp-price-final"]';
+    private readonly SALE_PERCENT_QUICK_VIEW = 'a[class="tx-link-a stampa-sales_2O4Q link_3vu6 tx-link_29YD"]';
 
     private nameLocator: Locator
     private randomTitle: Locator;
@@ -26,12 +29,9 @@ export class ItemPage extends BasePage {
     private precentagesale: Locator;
     private actuallprice: Locator;
     private colorName: Locator;
-    private imgUrl: Locator;
-    private addToCart: Locator;
     private sizeList: Locator;
     private colorList: Locator;
-    private itemName: Locator;
-    private itemDetails: { name?: string, color?: string, size?: string, tag?: string, Itembrand?: string, finalprice?: string, actualprice?: string, sale?: string, colortiltle?: string, itemUrl?: string };
+    private itemNameQuickView: Locator;
 
     constructor(page: Page) {
         super(page)
@@ -40,15 +40,12 @@ export class ItemPage extends BasePage {
         this.precentagesale = this.page.locator(this.PRECENTAGE_SALE);
         this.actuallprice = this.page.locator(this.ACTUALL_PRICE);
         this.colorName = this.page.locator(this.COLOR_TITLE);
-        this.imgUrl = this.page.locator(this.IMAGE_URL);
         this.brandlocator = this.page.locator(this.BRAND);
 
         this.randomTitle = this.page.locator(this.RANDOM_NAME);
-        this.addToCart = this.page.locator(this.ADD_TO_CART);
         this.sizeList = this.page.locator(this.SIZE_OPTIONS);
         this.colorList = this.page.locator(this.COLOR_OPTIONS);
-        this.itemName = this.page.locator(this.TITLE);
-        this.itemDetails = {};
+        this.itemNameQuickView = this.page.locator(this.TITLE_QUICK_VIEW);
     }
     private getRandomIndex = (count: number): number => { return Math.floor(Math.random() * count); }
 
@@ -65,18 +62,10 @@ export class ItemPage extends BasePage {
             return textContent;
         }
     }
-    async getItemDetails() {
-        await this.getItemName();
-        await this.chooseColor();
-        await this.chooseSize();
-        await this.colorTitle();
-        return this.itemDetails;
-    }
 
-    async getItemName() {
-        const name = await this.itemName.textContent();
+    async getItemNameQuickView() {
+        const name = await this.itemNameQuickView.textContent();
         if (name) {
-            this.itemDetails.name = name;
             return name;
         }
     }
@@ -84,14 +73,14 @@ export class ItemPage extends BasePage {
     async chooseColor() {
         const colorTextContent = await this.selectRandomColor();
         if (colorTextContent) {
-            this.itemDetails.color = colorTextContent;
+            return colorTextContent;
         }
     }
 
     async chooseSize() {
         const sizeTextContent = await this.selectRandomSize();
         if (sizeTextContent) {
-            this.itemDetails.size = sizeTextContent;
+            return sizeTextContent;
         }
     }
     private async selectRandomColor() {
@@ -120,58 +109,88 @@ export class ItemPage extends BasePage {
         return randomSizeTextContent;
     }
 
-    async nameTag(index: number) {
-        const tagg = this.itemtag.nth(index);
-        if (await tagg.isVisible()) {
-            const tagTectContetnt = await tagg.textContent();
-            if (tagTectContetnt) {
-                this.itemDetails.tag = tagTectContetnt;
-                return tagTectContetnt;
-
-            }
+    async nameTagInsideQuickView() {
+        const tagQuickView = await this.page.locator(this.TAG_NAME_QUICK_VIEW).textContent();
+        if (tagQuickView) {
+            return tagQuickView;
         }
-        console.error("this is not a speacial item")
     }
 
-    async brandName(index: number) {
+
+    async getItemNameTagByIndex(index: number) {
+        const nameTage = await this.itemtag.nth(index).textContent();
+        if (nameTage) {
+            return nameTage;
+        }
+    }
+
+    async brandNameByIndex(index: number) {
         const itemInfo = this.brandlocator.nth(index);
         const brand = itemInfo.locator("span");
         const brandName = await brand.textContent();
         if (brandName) {
-            this.itemDetails.Itembrand = brandName;
             return brandName;
         }
 
     }
+    async brandNameFromQuickView() {
+        const brandLocate = this.page.locator(this.BRAND_NAME_QUICK_VIEW);
+        const brandname = await brandLocate.textContent();
+        if (brandname) {
+            return brandname;
+        }
 
-    async finalPrice(index: number) {
+    }
+
+    async finalPriceByIndex(index: number) {
         const finalprice = this.finalprice.nth(index);
         const priceContetnt = await finalprice.textContent();
         if (priceContetnt) {
-            this.itemDetails.finalprice = priceContetnt;
             return priceContetnt;
         }
     }
+    async finalPriceQuickView() {
+        const final = this.page.locator(this.FINAL_PRICE_QUICK_VIEW);
+        const priceValue = await final.textContent();
+        if (priceValue) {
+            return priceValue;
+        }
 
-    async actuallPrice(index: number) {
+
+    }
+
+    async actuallPriceByIndex(index: number) {
         const actuallprice = this.actuallprice.nth(index);
         if (await actuallprice.isVisible()) {
             const priceContetnt = await actuallprice.textContent();
             if (priceContetnt) {
-                this.itemDetails.actualprice = priceContetnt;
                 return priceContetnt;
             }
         }
         console.error("item is not on sale")
     }
 
-    async salePrecent(index: number) {
+    async actuallPriceQuickView() {
+        const actuallprice = this.page.locator(this.ACTUALL_PRICE_QUICK_VIEW);
+        const priceContetnt = await actuallprice.textContent();
+        if (priceContetnt) {
+            return priceContetnt;
+        }
+    }
+
+    async salePrecentQuickView() {
+        const saleprecentage = this.page.locator(this.SALE_PERCENT_QUICK_VIEW)
+        const saleContetnt = await saleprecentage.textContent();
+        if (saleContetnt) {
+            return saleContetnt;
+        }
+    }
+    async salePrecentByIndex(index: number) {
         const saleprecentage = this.precentagesale.nth(index);
         if (await saleprecentage.isVisible()) {
 
             const saleContetnt = await saleprecentage.textContent();
             if (saleContetnt) {
-                this.itemDetails.sale = saleContetnt;
                 return saleContetnt;
             }
         }
@@ -181,24 +200,15 @@ export class ItemPage extends BasePage {
     }
 
 
-    async colorTitle() {
+    async colorTitleQuickView() {
         //if the title match the random choosen color
         const colorName = this.colorName;
         const colorContet = await colorName.textContent();
         if (colorContet) {
-            this.itemDetails.colortiltle = colorContet;
             return colorContet;
         }
     }
 
-    async itemImage(index: number) {
-        const imageLocator = this.imgUrl.nth(index);
-        const imageSrc = await imageLocator.getAttribute('src');
-        if (imageSrc) {
-            this.itemDetails.itemUrl = imageSrc;
-            return imageSrc;
-        }
-    }
     async navigateTo() {
         await this.page.goto(urls.just_landed_page);
     }
